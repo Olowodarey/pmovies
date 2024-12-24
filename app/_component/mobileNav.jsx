@@ -86,28 +86,7 @@ export default function MobileNavbar() {
               </li>
             ))}
           </ul>
-          <div className="mt-8">
-            <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Your teams</h3>
-            <ul role="list" className="mt-1 space-y-1">
-              {teams.map((team) => (
-                <li key={team.name}>
-                  <Link href={team.href} passHref>
-                    <div
-                      className={classNames(
-                        pathname === team.href ? "bg-gray-800 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                        "group flex items-center px-3 py-2 text-sm font-medium rounded-md"
-                      )}
-                    >
-                      <span className="mr-3 h-6 w-6 flex items-center justify-center rounded-full bg-gray-700 text-xs font-medium text-gray-400">
-                        {team.initial}
-                      </span>
-                      <span className="truncate">{team.name}</span>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+        
         </nav>
             </div>
           </div>
