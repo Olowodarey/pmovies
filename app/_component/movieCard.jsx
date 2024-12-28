@@ -15,7 +15,8 @@ const MovieCard = ({ movie }) => {
         <div className="relative w-full h-full">
           <Image
             alt={movie.title}
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path || banner}`}
+            src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path
+              || banner}`}
             layout="fill"
             objectFit="cover"
             className="object-cover"
