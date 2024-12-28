@@ -39,8 +39,8 @@ const Moviepage = () => {
 
   
       <div className="mt-10">
-        <h2 className="text-2xl font-bold">Similar Movies</h2>
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+        <h2 className=" flex justify-center text-2xl font-bold">Similar Movies</h2>
+        <div className="mt-5  px-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           {similarMoviesData?.results.slice(0, 8).map((similarMovie) => (
             <MovieCard key={similarMovie.id} movie={similarMovie} />
           ))}
