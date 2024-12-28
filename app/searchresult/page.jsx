@@ -19,7 +19,7 @@ const SearchResults = () => {
   return (
     <div>
       <h1 className=" mt-10 text-2xl font-bold flex  justify-center ">Search Results for "{query}"</h1>
-      <div className="movie-grid grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mt-8">
+      <div className=" px-5 movie-grid grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mt-8">
         {movies?.results.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
