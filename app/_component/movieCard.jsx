@@ -10,12 +10,13 @@ const MovieCard = ({ movie }) => {
 
     <Link href={`/details/${id}`}>
     
-    <div className="group relative w-full sm:w-[180px] border-2 p-2 rounded-md">
-      <div className="flex justify-center h-[120px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-10 lg:h-32 xl:h-40">
+    <div className="group relative w-full sm:w-[210px] border-2 p-2 rounded-md">
+      <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-10 lg:h-[250px] xl:h-[300px]">
         <div className="relative w-full h-full">
           <Image
             alt={movie.title}
-            src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path
+
               || banner}`}
             layout="fill"
             objectFit="cover"
