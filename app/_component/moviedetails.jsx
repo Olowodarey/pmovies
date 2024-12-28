@@ -7,7 +7,7 @@ import { FaRegCalendarTimes } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { IoTime } from "react-icons/io5";
 import Link from "next/link";
-import { addToWatch } from "../_lib/watchSlice";
+
 
 const formatCurrency = (amount) => {
   return amount ? `$${amount.toLocaleString()}` : "N/A";
@@ -31,9 +31,6 @@ const Moviedetails = ({ movie, trailer }) => {
 
   const dispatch = useDispatch;
 
-  const handleAddtoWatch = () => {
-    dispatch(addToWatch({ movie }));
-  };
 
   return (
     <div>
