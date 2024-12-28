@@ -1,24 +1,39 @@
 "use client";
 import React from "react";
 import banner from "@/app/public/banner.png";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { FaRegCalendarTimes } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { IoTime } from "react-icons/io5";
 import Link from "next/link";
-
+import { addToWatch } from "../_lib/watchSlice";
 
 const formatCurrency = (amount) => {
   return amount ? `$${amount.toLocaleString()}` : "N/A";
 };
 
 const Moviedetails = ({ movie, trailer }) => {
-  const { title, overview, runtime, release_date, genres, poster_path, revenue, budget, } = movie;
+  const {
+    title,
+    overview,
+    runtime,
+    release_date,
+    genres,
+    poster_path,
+    revenue,
+    budget,
+  } = movie;
 
-  
   const hours = Math.floor(runtime / 60);
   const minutes = runtime % 60;
   const formattedRuntime = `${hours}h ${minutes}m`;
+
+  const dispatch = useDispatch;
+
+  const handleAddtoWatch = () => {
+    dispatch(addToWatch({ movie }));
+  };
 
   return (
     <div>
@@ -67,6 +82,16 @@ const Moviedetails = ({ movie, trailer }) => {
                 </Link>
               </button>
             )}
+            <div>
+              {" "}
+              <button
+                className="mt-4 w-full px-4 py-2 rounded-md bg-blue-500 text-white"
+                onClick={handleAddtoWatch}
+              >
+                {" "}
+                Add to Watch{" "}
+              </button>{" "}
+            </div>
           </div>
         </div>
       </div>

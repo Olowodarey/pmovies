@@ -35,6 +35,9 @@ export const tmdbApi = createApi({
     }),
     fetchSimilarMovies: builder.query({
       query: (id) => `movie/${id}/similar`
+    }),
+    fetchSearchMovies: builder.query({
+      query: (title) => `search/movie?query=${title}&api_key=${API_KEY}`
     })
   }),
 });
@@ -46,5 +49,6 @@ export const {
   useFetchAnimatedMoviesQuery, 
   useFetchMovieByIdQuery, 
   useFetchMovieVideoQuery, 
-  useFetchSimilarMoviesQuery 
+  useFetchSimilarMoviesQuery,
+  useFetchSearchMoviesQuery
 } = tmdbApi;

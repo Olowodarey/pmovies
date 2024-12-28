@@ -8,7 +8,7 @@ import Loading from "../Loading";
 const page = ({ timeWindow }) => {
   const { data, error, isLoading } = useFetchTrendingMoviesQuery(timeWindow);
 
-  if (isLoading) return <div><Loading /></div>;
+  if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading /></div>;
   if (error) return <div>Error: {error.message}</div>;
 
   const moviesToDisplay = data.results;
@@ -20,7 +20,7 @@ const page = ({ timeWindow }) => {
            <p className="text-xl font-bold"> check out trending movies</p>
         </div>
 
-      <div className="  mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-5 lg:gap-x-2">
+      <div className=" px-6 mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-5 lg:gap-x-2">
         {moviesToDisplay.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}

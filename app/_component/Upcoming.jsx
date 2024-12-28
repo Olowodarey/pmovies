@@ -16,9 +16,9 @@ const Upcoming = () => {
       </div>
 
       <div className="lg:hidden flex justify-center px- space-x-1 items-center">
-        <div className="lineM " >
-          <div className="text-xs font-bold lg:text-2xl">
-             check out Upcoming Movies
+        <div className="line " >
+          <div className="text-s font-bold lg:text-2xl">
+             UpcomingMovies
           </div>
         </div>
       </div>

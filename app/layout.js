@@ -23,28 +23,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <ReduxProvider>
+        <Theme>
+          <body className={`${josefinSans.className} antialiased`}>
+            <Header />
+            <div className="flex  lg:flex lg:min-h-screen">
+              <Navbar />
 
-      <Theme>
-        <body className={`${josefinSans.className} antialiased`}>
-        <Header />
-          <div className="flex  lg:flex lg:min-h-screen">
-            <Navbar />
-          
-            <main className="flex-1 max-w-7xl lg:ml-64  ">
-         
-              {children}
-            </main>
+              <main className="flex-1 max-w-7xl lg:ml-64  ">{children}</main>
+            </div>
 
-          
-          </div>
-
-          <Footer />
-        </body>
-      </Theme>
-
-
+            <Footer />
+          </body>
+        </Theme>
       </ReduxProvider>
-    
     </html>
   );
 }

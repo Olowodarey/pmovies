@@ -11,7 +11,7 @@ const MovieCard = ({ movie }) => {
     <Link href={`/details/${id}`}>
     
     <div className="group relative w-full sm:w-[180px] border-2 p-2 rounded-md">
-      <div className="flex justify-center h-[120px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-32 xl:h-40">
+      <div className="flex justify-center h-[120px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-10 lg:h-32 xl:h-40">
         <div className="relative w-full h-full">
           <Image
             alt={movie.title}
@@ -23,9 +23,9 @@ const MovieCard = ({ movie }) => {
         </div>
       </div>
       <h3 className="mt-4 font-bold text-sm sm:text-sm ">
-        {movie.title}
+        {title.length > 20? `${title.slice(0, 16)}...` : movie.title}
       </h3>
-      <div className="mt-6 flex justify-between items-center">
+      <div className="mt-8 flex justify-between items-center">
         <p className="mt-1 text-xs sm:text-sm font-medium ">
           {movie.release_date}
         </p>
