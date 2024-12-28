@@ -79,16 +79,7 @@ const Moviedetails = ({ movie, trailer }) => {
                 </Link>
               </button>
             )}
-            <div>
-              {" "}
-              <button
-                className="mt-4 w-full px-4 py-2 rounded-md bg-blue-500 text-white"
-                onClick={handleAddtoWatch}
-              >
-                {" "}
-                Add to Watch{" "}
-              </button>{" "}
-            </div>
+         
           </div>
         </div>
       </div>

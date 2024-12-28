@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import MovieCard from "@/app/_component/movieCard"; 
 import { useFetchSearchMoviesQuery } from "@/app/_services/fetchquerry"; 
@@ -28,4 +28,10 @@ const SearchResults = () => {
   );
 };
 
-export default SearchResults;
+export default function App() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <SearchResults />
+    </Suspense>
+  );
+}
