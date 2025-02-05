@@ -40,7 +40,7 @@ export default function MobileNavbar() {
     <div>
       <div className="lg:hidden flex justify-end">
         <button onClick={toggleMobile} className="text-gray-300">
-          {mobileOpen ? <ImCancelCircle size={24} /> : <IoIosMenu size={24} />}
+          {mobileOpen ? <ImCancelCircle className="hidden"  /> : <IoIosMenu size={35} />} 
         </button>
       </div>
 
