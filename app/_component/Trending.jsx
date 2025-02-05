@@ -23,7 +23,7 @@ const Trending = () => {
           <button
              className={`px-4 py-1 text-sm rounded-full transition-all ${
               timeWindow === "week"
-                ? "bg-blue-700 text-green-300"
+                ? "bg-blue-700 text-white"
                 : "text-gray-600"
             }`}
             onClick={() => setTimeWindow("week")}
