@@ -10,7 +10,7 @@ const MovieCard = ({ movie }) => {
 
     <Link href={`/details/${id}`}>
     
-    <div className="group relative w-full sm:w-[210px] border-2 p-2 rounded-md">
+    <div className="group relative w-full sm:w-[280px] border-2 border-gray-800 p-2 rounded-md">
       <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-10 lg:h-[250px] xl:h-[300px]">
         <div className="relative w-full h-full">
           <Image
@@ -25,9 +25,9 @@ const MovieCard = ({ movie }) => {
         </div>
       </div>
       <h3 className="mt-4 font-bold text-sm sm:text-sm ">
-        {title.length > 20? `${title.slice(0, 16)}...` : movie.title}
+        {title.length > 30? `${title.slice(0, 20)}...` : movie.title}
       </h3>
-      <div className="mt-8 flex justify-between items-center">
+      <div className="mt-2 flex justify-between items-center">
         <p className="mt-1 text-xs sm:text-sm font-medium ">
           {movie.release_date}
         </p>

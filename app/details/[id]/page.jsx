@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Moviedetails from '../../_component/moviedetails';
-import MovieCard from '../../_component/movieCard'; // Assuming you have a MovieCard component
+import MovieCard from '../../_component/movieCard';
 import { useParams } from 'next/navigation';
 import { useFetchMovieByIdQuery, useFetchMovieVideoQuery, useFetchSimilarMoviesQuery } from '@/app/_services/fetchquerry';
 import Loading from '@/app/Loading';
@@ -30,17 +30,18 @@ const Moviepage = () => {
     );
   }
 
+  // ✅ Extract trailer video from videoData
   const trailer = videoData?.results.find(video => video.type === 'Trailer' && video.site === 'YouTube')?.key;
-  const trailerUrl = trailer ? `https://www.youtube.com/watch?v=${trailer}` : null;
 
   return (
     <div>
-      <Moviedetails movie={movie} trailer={trailerUrl} />
+      {/* ✅ Pass trailer as a prop */}
+      <Moviedetails movie={movie} trailer={trailer} />
 
-  
+      {/* Similar Movies Section */}
       <div className="mt-10">
-        <h2 className=" flex justify-center text-2xl font-bold">Similar Movies</h2>
-        <div className="mt-5  px-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+        <h2 className="flex justify-center text-2xl font-bold">Similar Movies</h2>
+        <div className="mt-5 px-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           {similarMoviesData?.results.slice(0, 8).map((similarMovie) => (
             <MovieCard key={similarMovie.id} movie={similarMovie} />
           ))}

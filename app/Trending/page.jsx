@@ -20,7 +20,7 @@ const page = ({ timeWindow }) => {
            <p className="text-xl  font-bold px-6"> check out trending movies </p>
         </div>
 
-      <div className=" px-6 mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-5 lg:gap-x-2">
+      <div className=" px-6 mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
         {moviesToDisplay.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
