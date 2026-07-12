@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { Request, Response } from 'express';
+import type { CookieOptions, Request, Response } from 'express';
 import { AuthService, GoogleProfile } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
@@ -32,7 +32,7 @@ export class AuthController {
   // redirect itself - which is why login could create a user row but the
   // frontend could never see the session). SameSite=None requires Secure,
   // which breaks plain-HTTP local dev, hence the NODE_ENV branch.
-  private cookieOptions() {
+  private cookieOptions(): CookieOptions {
     const isProduction = process.env.NODE_ENV === 'production';
     return {
       httpOnly: true,
