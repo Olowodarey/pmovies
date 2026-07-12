@@ -74,7 +74,9 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
           </div>
 
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className=" text-xl sm:text-3xl font-bold tracking-tight text-ink">{title}</h1>
+            <h1 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-ink">
+              {title}
+            </h1>
             <div className="grid items-center space-y-1 lg:space-y-0 px-1 lg:flex mt-2 lg:space-x-4 text-ink-muted">
               <p className="flex  space-x-1 text-sm font-medium">
                 <FaRegCalendarTimes />

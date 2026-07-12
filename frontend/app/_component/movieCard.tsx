@@ -12,23 +12,22 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
   return (
     <Link href={`/details/${id}`}>
-      <div className="group relative w-full sm:w-[280px] bg-surface border border-edge p-2 rounded-lg shadow-sm hover:shadow-lg hover:border-brand transition-all">
-        <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md lg:h-[250px] xl:h-[300px]">
-          <div className="relative w-full h-full">
-            <Image
-              alt={title}
-              src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : banner}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
+      <div className="group relative w-full bg-surface border border-edge p-2 rounded-lg shadow-sm hover:shadow-lg hover:border-brand transition-all">
+        <div className="relative w-full aspect-[2/3] overflow-hidden rounded-md">
+          <Image
+            alt={title}
+            src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : banner}
+            fill
+            sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 45vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
-        <h3 className="mt-4 font-bold text-sm sm:text-sm text-ink">
-          {title.length > 30 ? `${title.slice(0, 20)}...` : title}
+        <h3 className="mt-3 font-display font-semibold text-sm leading-snug min-h-[2.5rem] line-clamp-2 text-ink">
+          {title}
         </h3>
         <div className="mt-2 flex justify-between items-center">
-          <p className="mt-1 text-xs sm:text-sm font-medium text-ink-muted">{release_date}</p>
-          <p className="mt-1 text-xs sm:text-sm font-semibold text-brand">
+          <p className="text-xs sm:text-sm font-medium text-ink-muted">{release_date}</p>
+          <p className="text-xs sm:text-sm font-semibold text-brand">
             ★ {vote_average.toFixed(1)}
           </p>
         </div>
