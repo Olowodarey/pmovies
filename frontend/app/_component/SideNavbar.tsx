@@ -36,16 +36,19 @@ export default function Navbar() {
       {/* Sidebar for desktop */}
       <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:overflow-y-auto lg:px-6">
         <nav className="flex-1 mt-[300px]">
-          <ul role="list" className="space-y-2">
+          <p className="px-4 mb-4 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+            Browse
+          </p>
+          <ul role="list" className="space-y-1.5">
             {navigation.map((item) => (
               <li key={item.name}>
                 <Link href={item.href}>
                   <div
                     className={classNames(
                       pathname === item.href
-                        ? "bg-brand text-brand-contrast"
+                        ? "bg-brand text-brand-contrast shadow-md"
                         : "text-ink-muted hover:bg-surface-hover hover:text-ink",
-                      "group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                      "group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200"
                     )}
                   >
                     <div className="flex items-center space-x-4">
@@ -53,8 +56,8 @@ export default function Navbar() {
                         className={classNames(
                           pathname === item.href
                             ? "text-brand-contrast"
-                            : "text-ink-muted group-hover:text-ink",
-                          "h-5 w-5 flex items-center"
+                            : "text-ink-muted group-hover:text-brand",
+                          "h-5 w-5 flex items-center transition-colors duration-200"
                         )}
                         aria-hidden="true"
                       />
