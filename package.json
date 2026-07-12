@@ -5,5 +5,8 @@
   "workspaces": [
     "backend",
     "frontend"
-  ]
+  ],
+  "scripts": {
+    "build": "cd backend && pnpm run prisma:generate && pnpm run build"
+  }
 }
