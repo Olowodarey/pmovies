@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <div className="flex  lg:flex lg:min-h-screen">
               <Navbar />
 
-              <div className="flex-1 lg:pl-64">
+              <div className="flex-1 lg:pl-80">
                 <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10">{children}</main>
               </div>
             </div>

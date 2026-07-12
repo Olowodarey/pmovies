@@ -34,13 +34,16 @@ export default function Navbar() {
   return (
     <div>
       {/* Sidebar for desktop */}
-      <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:overflow-y-auto lg:px-6">
+      <div className="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 lg:overflow-y-auto lg:px-4">
         <nav className="flex-1 mt-[300px]">
-          <div className="bg-surface border border-edge rounded-2xl shadow-sm p-4">
-            <p className="px-2 mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
-              Browse
-            </p>
-            <ul role="list" className="space-y-1.5">
+          <div className="bg-surface border border-edge rounded-2xl shadow-lg p-5">
+            <div className="flex items-center gap-2 px-2 mb-6">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted">
+                Browse
+              </p>
+            </div>
+            <ul role="list" className="space-y-3">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -51,15 +54,15 @@ export default function Navbar() {
                           isActive
                             ? "bg-brand text-brand-contrast shadow-md"
                             : "text-ink-muted hover:bg-surface-hover hover:text-ink",
-                          "group flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200"
+                          "group flex items-center gap-3.5 px-3.5 py-3 text-sm font-medium rounded-xl transition-all duration-200"
                         )}
                       >
                         <span
                           className={classNames(
                             isActive
-                              ? "bg-transparent text-brand-contrast"
-                              : "bg-surface-alt text-ink-muted group-hover:text-brand",
-                            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-200"
+                              ? "bg-white/15 text-brand-contrast"
+                              : "bg-surface-alt text-ink-muted group-hover:bg-brand group-hover:text-white group-hover:scale-110",
+                            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all duration-200"
                           )}
                         >
                           <item.icon className="h-5 w-5" aria-hidden="true" />
