@@ -32,12 +32,12 @@ const Search = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Search for movies..."
-        className="p-1 border rounded-md text-xs lg:text-base"
+        className="p-1 border border-edge rounded-md text-xs lg:text-base bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
       />
 
       <button
         onClick={handleSearch}
-        className="p-1 ml-2 text-xs lg:text-base bg-blue-500 text-white rounded-md"
+        className="p-1 ml-2 text-xs lg:text-base bg-brand text-brand-contrast rounded-md font-medium hover:bg-brand-hover transition-colors"
       >
         Search
       </button>

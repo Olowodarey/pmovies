@@ -30,7 +30,7 @@ const Moviepage = () => {
   if (movieError || videoError || similarMoviesError || !movie) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-lg font-semibold text-red-600">
+        <p className="text-lg font-semibold text-danger">
           Error loading movie. Please try again later.
         </p>
       </div>

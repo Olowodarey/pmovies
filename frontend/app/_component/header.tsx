@@ -27,30 +27,30 @@ const Header = () => {
   };
 
   return (
-    <div className="py-2 px-5 lg:px-10 bg-gray-700 ">
-      <div className="flex justify-between">
-        <div className="flex space-x-1 items-center ">
+    <div className="py-3 px-5 lg:px-10 bg-surface border-b border-edge">
+      <div className="flex justify-between items-center">
+        <div className="flex space-x-2 items-center">
           <Image src={logo} alt="logo" />
-          <span className="font-bold text-red-600">Movies</span>
+          <span className="font-bold tracking-wide text-brand">Movies</span>
         </div>
 
         <div className="hidden pl-[80px] lg:flex">
           <Search />
         </div>
 
-        <div className="flex items-center space-x-3 lg:space-x-5">
+        <div className="flex items-center space-x-4 lg:space-x-5">
           <Link
             href={user ? "/profile" : "/login"}
-            className="text-gray-50"
+            className="text-ink-muted hover:text-brand transition-colors"
             aria-label={user ? "Profile" : "Log in"}
           >
             {user?.avatarUrl ? (
               <Image
                 src={user.avatarUrl}
                 alt=""
-                width={20}
-                height={20}
-                className="rounded-full"
+                width={22}
+                height={22}
+                className="rounded-full ring-1 ring-edge"
               />
             ) : (
               <FaUserCircle className="h-5 w-5" />
@@ -58,7 +58,7 @@ const Header = () => {
           </Link>
 
           <button
-            className="text-gray-50"
+            className="text-ink-muted hover:text-brand transition-colors"
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
@@ -77,7 +77,7 @@ const Header = () => {
 
       {/* mobile */}
 
-      <div className="mt-5 flex justify-center lg:hidden">
+      <div className="mt-4 flex justify-center lg:hidden">
         <Search />
       </div>
     </div>

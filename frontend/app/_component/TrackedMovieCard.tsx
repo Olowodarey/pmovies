@@ -25,7 +25,7 @@ const TrackedMovieCard = ({
       : (item as WatchlistItem).addedAt;
 
   return (
-    <div className="group relative w-full sm:w-[280px] border-2 border-gray-800 p-2 rounded-md">
+    <div className="group relative w-full sm:w-[280px] bg-surface border border-edge p-2 rounded-lg shadow-sm hover:shadow-lg transition-all">
       <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md lg:h-[250px] xl:h-[300px]">
         <div className="relative w-full h-full">
           <Image
@@ -36,15 +36,15 @@ const TrackedMovieCard = ({
                 : banner
             }
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
       </div>
 
-      <h3 className="mt-4 font-bold text-sm">
+      <h3 className="mt-4 font-bold text-sm text-ink">
         {item.title.length > 30 ? `${item.title.slice(0, 20)}...` : item.title}
       </h3>
-      <p className="mt-1 text-xs text-gray-400">
+      <p className="mt-1 text-xs text-ink-muted">
         {variant === "watched" ? "Watched" : "Added"} {new Date(date).toLocaleDateString()}
       </p>
 
@@ -58,9 +58,9 @@ const TrackedMovieCard = ({
               aria-label={`Rate ${star} stars`}
             >
               {rating && star <= rating ? (
-                <FaStar className="h-4 w-4 text-yellow-500" />
+                <FaStar className="h-4 w-4 text-brand" />
               ) : (
-                <FaRegStar className="h-4 w-4 text-yellow-500" />
+                <FaRegStar className="h-4 w-4 text-brand" />
               )}
             </button>
           ))}
@@ -72,7 +72,7 @@ const TrackedMovieCard = ({
           <button
             type="button"
             onClick={onMarkWatched}
-            className="bg-blue-600 px-2 py-1 rounded-3xl text-xs"
+            className="bg-brand text-brand-contrast px-2 py-1 rounded-3xl text-xs font-medium hover:bg-brand-hover transition-colors"
           >
             Mark Watched
           </button>
@@ -80,7 +80,7 @@ const TrackedMovieCard = ({
         <button
           type="button"
           onClick={onRemove}
-          className="text-xs text-red-500 ml-auto"
+          className="text-xs text-danger hover:text-danger-hover ml-auto transition-colors"
         >
           Remove
         </button>

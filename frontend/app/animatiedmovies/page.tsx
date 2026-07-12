@@ -8,7 +8,7 @@ const AnimatedMoviesPage = () => {
   const { data, error, isLoading } = useFetchAnimatedMoviesQuery();
 
   if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading /></div>;
-  if (error) return <div>Error loading animated movies</div>;
+  if (error) return <div className="p-6 text-center text-danger">Error loading animated movies</div>;
 
   const moviesToDisplay = data?.results || [];
 

@@ -43,14 +43,22 @@ export default function Navbar() {
                   <div
                     className={classNames(
                       pathname === item.href
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                      "group flex items-center px-4 py-3 text-sm font-medium rounded-md"
+                        ? "bg-brand text-brand-contrast"
+                        : "text-ink-muted hover:bg-surface-hover hover:text-ink",
+                      "group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors"
                     )}
                   >
-                    <div className="flex items-center  space-x-5 ">
-                      <item.icon className="h-5 w-5  text-gray-400 flex items-center" aria-hidden="true" />
-                      <span className="whitespace-nowrap text-[17px] mt-2  ">{item.name}</span>
+                    <div className="flex items-center space-x-4">
+                      <item.icon
+                        className={classNames(
+                          pathname === item.href
+                            ? "text-brand-contrast"
+                            : "text-ink-muted group-hover:text-ink",
+                          "h-5 w-5 flex items-center"
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="whitespace-nowrap text-[15px]">{item.name}</span>
                     </div>
                   </div>
                 </Link>

@@ -18,7 +18,7 @@ const SearchResults = () => {
 
   if (error || !movies?.results?.length) {
     return (
-      <p className="mt-10 text-2xl font-bold flex pr-[120px] justify-center">
+      <p className="mt-10 text-2xl font-bold flex pr-[120px] justify-center text-ink-muted">
         No movie found for {query}
       </p>
     );

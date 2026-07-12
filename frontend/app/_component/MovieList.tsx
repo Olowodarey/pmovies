@@ -10,7 +10,7 @@ const MovieList = ({ timeWindow }: MovieListProps) => {
   const { data, error, isLoading } = useFetchTrendingMoviesQuery(timeWindow);
 
   if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading /></div>;
-  if (error) return <div>Error loading trending movies</div>;
+  if (error) return <div className="p-6 text-center text-danger">Error loading trending movies</div>;
 
   const moviesToDisplay = data?.results.slice(0, 12) || [];
 

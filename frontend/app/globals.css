@@ -3,18 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-hover: #f1f1ee;
+  --surface-alt: #efeeea;
+  --border: #e3e2de;
+  --text: #17181c;
+  --text-muted: #66655f;
+  --brand: #a3760a;
+  --brand-hover: #8a6408;
+  --brand-contrast: #ffffff;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
 }
 
 :root.dark {
-  --background: #0a0a0a;
-  --foreground: #ffffff;
+  --bg: #0b0c0f;
+  --surface: #17181c;
+  --surface-hover: #1f2025;
+  --surface-alt: #202126;
+  --border: #2b2c31;
+  --text: #f2f2f0;
+  --text-muted: #9a9a95;
+  --brand: #d4a537;
+  --brand-hover: #e3ba52;
+  --brand-contrast: #17181c;
+  --danger: #ef5a5f;
+  --danger-hover: #f47a7e;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--text);
+  background: var(--bg);
   font-family: "Josefin Sans", sans-serif;
 }
 
@@ -30,18 +50,6 @@ body {
 .line::after {
   content: "";
   height: 2px;
-  background-color: #0f21e7;
+  background-color: var(--brand);
   display: block;
 }
-
-
-  .spinner {
-    margin: 3.2rem auto 1.6rem;
-    width: 60px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 8px solid blue;
-    border-right-color: red;
-    animation: rotate 1s infinite linear;
-  }
-

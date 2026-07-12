@@ -7,7 +7,7 @@ const SeriesPage = () => {
   const { data, error, isLoading } = useFetchSeriesQuery();
 
   if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading/></div>;
-  if (error) return <div>Error loading series</div>;
+  if (error) return <div className="p-6 text-center text-danger">Error loading series</div>;
 
   const seriesToDisplay = data?.results || [];
 

@@ -45,21 +45,21 @@ export default function MobileNavbar() {
   return (
     <div>
       <div className="lg:hidden flex justify-end">
-        <button onClick={toggleMobile} className="text-gray-300">
+        <button onClick={toggleMobile} className="text-ink-muted">
           {mobileOpen ? <ImCancelCircle className="hidden" /> : <IoIosMenu size={35} />}
         </button>
       </div>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={toggleMobile}></div>
-          <div className="relative flex-1 flex flex-col max-w-[220px] w-full bg-gray-900">
+          <div className="fixed inset-0 bg-black/60" onClick={toggleMobile}></div>
+          <div className="relative flex-1 flex flex-col max-w-[220px] w-full bg-surface border-r border-edge">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
               <button
-                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand"
                 onClick={toggleMobile}
               >
-                <ImCancelCircle className="h-6 w-6 text-white" />
+                <ImCancelCircle className="h-6 w-6 text-ink" />
               </button>
             </div>
             <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
@@ -72,12 +72,18 @@ export default function MobileNavbar() {
                           onClick={closeMobileMenu}
                           className={classNames(
                             pathname === item.href
-                              ? "bg-gray-800 text-white"
-                              : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                              ? "bg-brand text-brand-contrast"
+                              : "text-ink-muted hover:bg-surface-hover hover:text-ink",
+                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors"
                           )}
                         >
-                          <item.icon className="mr-3 h-6 w-6 text-gray-400" aria-hidden="true" />
+                          <item.icon
+                            className={classNames(
+                              pathname === item.href ? "text-brand-contrast" : "text-ink-muted",
+                              "mr-3 h-6 w-6"
+                            )}
+                            aria-hidden="true"
+                          />
                           {item.name}
                         </div>
                       </Link>

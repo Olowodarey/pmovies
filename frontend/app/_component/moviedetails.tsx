@@ -64,7 +64,7 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
       <div className="mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="flex flex-col     lg:grid lg:grid-cols-2  ">
           {/* Image gallery */}
-          <div className="relative h-[400px] w-full sm:w-[400px] sm:h-[500px] overflow-hidden rounded-lg bg-gray-500 flex items-center justify-center">
+          <div className="relative h-[400px] w-full sm:w-[400px] sm:h-[500px] overflow-hidden rounded-lg bg-surface-alt flex items-center justify-center">
             <Image
               src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : banner}
               alt={title}
@@ -74,8 +74,8 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
           </div>
 
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className=" text-xl sm:text-3xl font-bold tracking-tight">{title}</h1>
-            <div className="grid items-center space-y-1 lg:space-y-0 px-1 lg:flex mt-2 lg:space-x-4">
+            <h1 className=" text-xl sm:text-3xl font-bold tracking-tight text-ink">{title}</h1>
+            <div className="grid items-center space-y-1 lg:space-y-0 px-1 lg:flex mt-2 lg:space-x-4 text-ink-muted">
               <p className="flex  space-x-1 text-sm font-medium">
                 <FaRegCalendarTimes />
                 <span>{release_date}</span>
@@ -87,8 +87,8 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
                 <span>Duration: {formattedRuntime}</span>
               </p>
             </div>
-            <p className="mt-4 text-sm">{overview}</p>
-            <div className="flex text-sm space-x-4 mt-4">
+            <p className="mt-4 text-sm text-ink">{overview}</p>
+            <div className="flex text-sm space-x-4 mt-4 text-ink-muted">
               <p>Budget: {formatCurrency(budget)}</p>
               <p>Revenue: {formatCurrency(revenue)}</p>
             </div>
@@ -102,8 +102,10 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
                       ? removeFromWatchlist({ tmdbId: movie.id, mediaType: "MOVIE" })
                       : addToWatchlist(trackableMovie)
                   }
-                  className={`px-3 py-1 rounded-3xl text-sm ${
-                    inWatchlist ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
+                  className={`px-3 py-1 rounded-3xl text-sm font-medium transition-colors ${
+                    inWatchlist
+                      ? "bg-surface-alt border border-edge text-ink"
+                      : "bg-brand text-brand-contrast hover:bg-brand-hover"
                   }`}
                 >
                   {inWatchlist ? "✓ In Watchlist" : "+ Add to Watchlist"}
@@ -112,14 +114,18 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
                   type="button"
                   disabled={isWatched}
                   onClick={() => markAsWatched(trackableMovie)}
-                  className="px-3 py-1 rounded-3xl text-sm bg-gray-700 text-white disabled:opacity-60"
+                  className={`px-3 py-1 rounded-3xl text-sm font-medium transition-colors ${
+                    isWatched
+                      ? "bg-surface-alt border border-edge text-ink-muted"
+                      : "border border-edge text-ink hover:bg-surface-hover"
+                  }`}
                 >
                   {isWatched ? "✓ Watched" : "Mark as Watched"}
                 </button>
               </div>
             ) : (
-              <p className="mt-4 text-sm">
-                <Link href="/login" className="text-blue-500">
+              <p className="mt-4 text-sm text-ink-muted">
+                <Link href="/login" className="text-brand">
                   Log in
                 </Link>{" "}
                 to add this to your watchlist or mark it as watched.

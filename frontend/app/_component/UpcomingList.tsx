@@ -6,7 +6,7 @@ const UpcomingList = () => {
   const { data, error, isLoading } = useFetchUpComingQuery();
 
   if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading /></div>;
-  if (error) return <div>Error loading upcoming movies</div>;
+  if (error) return <div className="p-6 text-center text-danger">Error loading upcoming movies</div>;
 
   const moviesToDisplay = data?.results.slice(0, 12) || [];
 

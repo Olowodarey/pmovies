@@ -65,28 +65,28 @@ const ProfilePage = () => {
   return (
     <div className="px-5 lg:px-7 mt-7">
       {/* Profile header */}
-      <div className="flex items-center gap-4 border-2 border-gray-800 rounded-md p-4">
+      <div className="flex items-center gap-4 bg-surface border border-edge rounded-lg shadow-sm p-4">
         {user.avatarUrl ? (
           <Image
             src={user.avatarUrl}
             alt=""
             width={64}
             height={64}
-            className="h-16 w-16 shrink-0 rounded-full object-cover"
+            className="h-16 w-16 shrink-0 rounded-full object-cover ring-2 ring-brand"
           />
         ) : (
-          <div className="h-16 w-16 shrink-0 rounded-full bg-blue-700 flex items-center justify-center text-xl font-bold">
+          <div className="h-16 w-16 shrink-0 rounded-full bg-brand text-brand-contrast flex items-center justify-center text-xl font-bold">
             {initials}
           </div>
         )}
         <div>
-          <h1 className="text-xl font-bold">{user.name || user.email}</h1>
-          <p className="text-sm text-gray-400">Member since {joinDate}</p>
+          <h1 className="text-xl font-bold text-ink">{user.name || user.email}</h1>
+          <p className="text-sm text-ink-muted">Member since {joinDate}</p>
         </div>
         <button
           type="button"
           onClick={() => logout()}
-          className="ml-auto text-sm text-red-500"
+          className="ml-auto text-sm text-danger hover:text-danger-hover transition-colors"
         >
           Log out
         </button>
@@ -100,11 +100,11 @@ const ProfilePage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex border border-gray-400 rounded-full mt-8 w-fit">
+      <div className="flex border border-edge rounded-full mt-8 w-fit">
         <button
           type="button"
-          className={`px-4 py-1 text-sm rounded-full transition-all ${
-            tab === "watchlist" ? "bg-blue-700 text-white" : "text-gray-600"
+          className={`px-4 py-1 text-sm rounded-full transition-colors ${
+            tab === "watchlist" ? "bg-brand text-brand-contrast" : "text-ink-muted hover:text-ink"
           }`}
           onClick={() => setTab("watchlist")}
         >
@@ -112,8 +112,8 @@ const ProfilePage = () => {
         </button>
         <button
           type="button"
-          className={`px-4 py-1 text-sm rounded-full transition-all ${
-            tab === "watched" ? "bg-blue-700 text-white" : "text-gray-600"
+          className={`px-4 py-1 text-sm rounded-full transition-colors ${
+            tab === "watched" ? "bg-brand text-brand-contrast" : "text-ink-muted hover:text-ink"
           }`}
           onClick={() => setTab("watched")}
         >
@@ -124,12 +124,15 @@ const ProfilePage = () => {
       {/* Content */}
       {items.length === 0 ? (
         <div className="mt-10 flex flex-col items-center text-center">
-          <p className="text-gray-400">
+          <p className="text-ink-muted">
             {tab === "watchlist"
               ? "Your watchlist is empty."
               : "You haven't marked anything as watched yet."}
           </p>
-          <Link href="/" className="mt-4 bg-blue-600 px-4 py-2 rounded-3xl text-sm">
+          <Link
+            href="/"
+            className="mt-4 bg-brand text-brand-contrast px-4 py-2 rounded-3xl text-sm font-medium hover:bg-brand-hover transition-colors"
+          >
             Browse movies
           </Link>
         </div>

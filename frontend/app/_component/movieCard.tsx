@@ -12,24 +12,24 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
   return (
     <Link href={`/details/${id}`}>
-      <div className="group relative w-full sm:w-[280px] border-2 border-gray-800 p-2 rounded-md">
-        <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md group-hover:opacity-10 lg:h-[250px] xl:h-[300px]">
+      <div className="group relative w-full sm:w-[280px] bg-surface border border-edge p-2 rounded-lg shadow-sm hover:shadow-lg hover:border-brand transition-all">
+        <div className="flex justify-center h-[250px] sm:h-[100px] w-full overflow-hidden rounded-md lg:h-[250px] xl:h-[300px]">
           <div className="relative w-full h-full">
             <Image
               alt={title}
               src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : banner}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </div>
-        <h3 className="mt-4 font-bold text-sm sm:text-sm ">
+        <h3 className="mt-4 font-bold text-sm sm:text-sm text-ink">
           {title.length > 30 ? `${title.slice(0, 20)}...` : title}
         </h3>
         <div className="mt-2 flex justify-between items-center">
-          <p className="mt-1 text-xs sm:text-sm font-medium ">{release_date}</p>
-          <p className="mt-1 text-xs sm:text-sm font-medium text-yellow-500">
-            Rating: {vote_average.toFixed(1)}
+          <p className="mt-1 text-xs sm:text-sm font-medium text-ink-muted">{release_date}</p>
+          <p className="mt-1 text-xs sm:text-sm font-semibold text-brand">
+            ★ {vote_average.toFixed(1)}
           </p>
         </div>
       </div>

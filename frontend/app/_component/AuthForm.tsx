@@ -52,8 +52,8 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   return (
     <div className="flex justify-center items-center min-h-[70vh] px-5">
-      <div className="w-full max-w-sm border-2 border-gray-800 rounded-md p-6">
-        <h1 className="text-xl font-bold text-center mb-6">
+      <div className="w-full max-w-sm bg-surface border border-edge rounded-lg shadow-sm p-6">
+        <h1 className="text-xl font-bold text-center mb-6 text-ink">
           {isLogin ? "Log in" : "Create an account"}
         </h1>
 
@@ -64,7 +64,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Name (optional)"
-              className="w-full p-2 border rounded-md text-sm"
+              className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
             />
           )}
           <input
@@ -73,7 +73,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="w-full p-2 border rounded-md text-sm"
+            className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
           />
           <input
             type="password"
@@ -82,48 +82,48 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full p-2 border rounded-md text-sm"
+            className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
           />
 
           {error !== undefined && (
-            <p className="text-sm text-red-500">{getErrorMessage(error, mode)}</p>
+            <p className="text-sm text-danger">{getErrorMessage(error, mode)}</p>
           )}
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 rounded-md py-2 text-white font-medium disabled:opacity-60"
+            className="w-full bg-brand text-brand-contrast rounded-md py-2 font-medium hover:bg-brand-hover transition-colors disabled:opacity-60"
           >
             {isLoading ? "Please wait..." : isLogin ? "Log in" : "Sign up"}
           </button>
         </form>
 
         <div className="flex items-center gap-3 mt-5">
-          <span className="h-px flex-1 bg-gray-700" />
-          <span className="text-xs text-gray-400">or</span>
-          <span className="h-px flex-1 bg-gray-700" />
+          <span className="h-px flex-1 bg-edge" />
+          <span className="text-xs text-ink-muted">or</span>
+          <span className="h-px flex-1 bg-edge" />
         </div>
 
         <a
           href={`${BACKEND_URL}/auth/google`}
-          className="mt-5 w-full flex items-center justify-center gap-2 border rounded-md py-2 text-sm font-medium"
+          className="mt-5 w-full flex items-center justify-center gap-2 border border-edge rounded-md py-2 text-sm font-medium text-ink hover:bg-surface-hover transition-colors"
         >
           <FcGoogle className="h-5 w-5" />
           Continue with Google
         </a>
 
-        <p className="mt-4 text-sm text-center text-gray-400">
+        <p className="mt-4 text-sm text-center text-ink-muted">
           {isLogin ? (
             <>
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="text-blue-500">
+              <Link href="/signup" className="text-brand">
                 Sign up
               </Link>
             </>
           ) : (
             <>
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-500">
+              <Link href="/login" className="text-brand">
                 Log in
               </Link>
             </>
