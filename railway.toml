@@ -4,6 +4,6 @@ buildCommand = "pnpm --filter backend run prisma:generate && pnpm --filter backe
 watchPatterns = ["backend/**"]
 
 [deploy]
-startCommand = "cd backend && pnpm run prisma:migrate && pnpm run start:prod"
+startCommand = "pnpm --filter backend run prisma:migrate && pnpm --filter backend run start:prod"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
