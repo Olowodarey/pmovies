@@ -2,7 +2,7 @@
 
 import { useFetchAnimatedMoviesQuery } from "@/app/_services/fetchquerry";
 import MovieCard from "@/app/_component/movieCard";
-import Loading from "../Loading";
+import Loading from "@/app/Loading";
 
 const AnimatedMoviesPage = () => {
   const { data, error, isLoading } = useFetchAnimatedMoviesQuery();

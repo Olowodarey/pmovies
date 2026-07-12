@@ -1,7 +1,7 @@
 "use client";
 import { useFetchSeriesQuery } from "@/app/_services/fetchquerry";
 import SeriesCard from "@/app/_component/SeriesCard";
-import Loading from "../Loading";
+import Loading from "@/app/Loading";
 
 const SeriesPage = () => {
   const { data, error, isLoading } = useFetchSeriesQuery();

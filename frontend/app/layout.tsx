@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_component/SideNavbar";
-import Header from "./_component/header";
 import Theme from "@/app/_themes/ThemeProvider";
 import ReduxProvider from "./_provider/ReduxProvider";
-import Footer from "./_component/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,16 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <ReduxProvider>
         <Theme>
           <body className={`${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}>
-            <Header />
-            <div className="flex  lg:flex lg:min-h-screen">
-              <Navbar />
-
-              <div className="flex-1 lg:pl-80">
-                <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10">{children}</main>
-              </div>
-            </div>
-
-            <Footer />
+            {children}
           </body>
         </Theme>
       </ReduxProvider>

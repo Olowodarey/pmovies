@@ -1,6 +1,6 @@
 "use client";
-import Moviedetails from "../../_component/moviedetails";
-import MovieCard from "../../_component/movieCard";
+import Moviedetails from "@/app/_component/moviedetails";
+import MovieCard from "@/app/_component/movieCard";
 import { useParams } from "next/navigation";
 import {
   useFetchMovieByIdQuery,

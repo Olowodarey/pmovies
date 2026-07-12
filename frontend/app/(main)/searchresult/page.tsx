@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import MovieCard from "@/app/_component/movieCard";
 import { useFetchSearchMoviesQuery } from "@/app/_services/fetchquerry";
-import Loading from "../Loading";
+import Loading from "@/app/Loading";
 
 const SearchResults = () => {
   const searchParams = useSearchParams();

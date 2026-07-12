@@ -1,7 +1,6 @@
-import Trending from "./_component/Trending";
+import Trending from "@/app/_component/Trending";
 import Upcoming from "@/app/_component/Upcoming";
-import Series from "./_component/Series";
-import "./globals.css";
+import Series from "@/app/_component/Series";
 
 const HomePage = () => {
   return (

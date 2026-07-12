@@ -27,58 +27,64 @@ const Header = () => {
   };
 
   return (
-    <div className="py-3 px-5 lg:px-10 bg-surface border-b border-edge">
-      <div className="flex justify-between items-center">
-        <div className="flex space-x-2 items-center">
-          <Image src={logo} alt="logo" />
-          <span className="font-bold tracking-wide text-brand">Movies</span>
-        </div>
+    <div className="py-3 bg-surface border-b border-edge">
+      {/* Matches main's lg:pl-80 (sidebar offset) + max-w-7xl mx-auto so header
+          content centers within the same column as page content. */}
+      <div className="lg:pl-80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="flex justify-between items-center lg:grid lg:grid-cols-[auto_1fr_auto] lg:gap-4">
+            <div className="flex space-x-2 items-center">
+              <Image src={logo} alt="logo" />
+              <span className="font-bold tracking-wide text-brand">Movies</span>
+            </div>
 
-        <div className="hidden pl-[80px] lg:flex">
-          <Search />
-        </div>
+            <div className="hidden lg:flex lg:justify-center">
+              <Search />
+            </div>
 
-        <div className="flex items-center space-x-4 lg:space-x-5">
-          <Link
-            href={user ? "/profile" : "/login"}
-            className="text-ink-muted hover:text-brand transition-colors"
-            aria-label={user ? "Profile" : "Log in"}
-          >
-            {user?.avatarUrl ? (
-              <Image
-                src={user.avatarUrl}
-                alt=""
-                width={22}
-                height={22}
-                className="rounded-full ring-1 ring-edge"
-              />
-            ) : (
-              <FaUserCircle className="h-5 w-5" />
-            )}
-          </Link>
+            <div className="flex items-center space-x-4 lg:space-x-5 lg:justify-end">
+              <Link
+                href={user ? "/profile" : "/login"}
+                className="text-ink-muted hover:text-brand transition-colors"
+                aria-label={user ? "Profile" : "Log in"}
+              >
+                {user?.avatarUrl ? (
+                  <Image
+                    src={user.avatarUrl}
+                    alt=""
+                    width={22}
+                    height={22}
+                    className="rounded-full ring-1 ring-edge"
+                  />
+                ) : (
+                  <FaUserCircle className="h-5 w-5" />
+                )}
+              </Link>
 
-          <button
-            className="text-ink-muted hover:text-brand transition-colors"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
-            {mounted && resolvedTheme === "dark" ? (
-              <FaSun className="h-5 w-5" />
-            ) : (
-              <FaMoon className="h-5 w-5" />
-            )}
-          </button>
+              <button
+                className="text-ink-muted hover:text-brand transition-colors"
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+              >
+                {mounted && resolvedTheme === "dark" ? (
+                  <FaSun className="h-5 w-5" />
+                ) : (
+                  <FaMoon className="h-5 w-5" />
+                )}
+              </button>
 
-          <div className="lg:hidden flex items-center">
-            <MobileNavbar />
+              <div className="lg:hidden flex items-center">
+                <MobileNavbar />
+              </div>
+            </div>
+          </div>
+
+          {/* mobile */}
+
+          <div className="mt-4 flex justify-center lg:hidden">
+            <Search />
           </div>
         </div>
-      </div>
-
-      {/* mobile */}
-
-      <div className="mt-4 flex justify-center lg:hidden">
-        <Search />
       </div>
     </div>
   );
