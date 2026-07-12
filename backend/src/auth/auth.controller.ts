@@ -26,11 +26,24 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
+  // Frontend (Vercel) and backend (Railway) live on different domains, so
+  // the auth cookie must be SameSite=None to survive cross-site fetch()
+  // calls (Lax only rides along on top-level navigations, e.g. the OAuth
+  // redirect itself - which is why login could create a user row but the
+  // frontend could never see the session). SameSite=None requires Secure,
+  // which breaks plain-HTTP local dev, hence the NODE_ENV branch.
+  private cookieOptions() {
+    const isProduction = process.env.NODE_ENV === 'production';
+    return {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+    };
+  }
+
   private setAuthCookie(res: Response, token: string) {
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      ...this.cookieOptions(),
       maxAge: COOKIE_MAX_AGE_MS,
     });
   }
@@ -57,7 +70,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('token');
+    res.clearCookie('token', this.cookieOptions());
     return { success: true };
   }
 
