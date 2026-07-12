@@ -3,14 +3,17 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/app/public/logo.png";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaUserCircle } from "react-icons/fa";
+import { useGetMeQuery } from "@/app/_services/backendApi";
 import MobileNavbar from "./mobileNav";
 import Search from "./scarch";
 
 const Header = () => {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { data: user } = useGetMeQuery();
 
   useEffect(() => {
     // Required by next-themes to avoid an SSR/client icon mismatch (server
@@ -35,7 +38,15 @@ const Header = () => {
           <Search />
         </div>
 
-        <div className="flex space-x-3 lg:space-x-5">
+        <div className="flex items-center space-x-3 lg:space-x-5">
+          <Link
+            href={user ? "/profile" : "/login"}
+            className="text-gray-50"
+            aria-label={user ? "Profile" : "Log in"}
+          >
+            <FaUserCircle className="h-5 w-5" />
+          </Link>
+
           <button
             className="text-gray-50"
             onClick={toggleTheme}

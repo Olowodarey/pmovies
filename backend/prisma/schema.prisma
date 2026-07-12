@@ -11,3 +11,46 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum MediaType {
+  MOVIE
+  TV
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+
+  watchlist WatchlistEntry[]
+  watched   WatchedEntry[]
+}
+
+model WatchlistEntry {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tmdbId     Int
+  mediaType  MediaType @default(MOVIE)
+  title      String
+  posterPath String?
+  addedAt    DateTime  @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+}
+
+model WatchedEntry {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tmdbId     Int
+  mediaType  MediaType @default(MOVIE)
+  title      String
+  posterPath String?
+  rating     Int?
+  watchedAt  DateTime  @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+}

@@ -1,8 +1,17 @@
 "use client";
 import banner from "@/app/public/banner.png";
 import Image from "next/image";
+import Link from "next/link";
 import { FaRegCalendarTimes } from "react-icons/fa";
 import type { MovieDetails as MovieDetailsType } from "@/app/_types/tmdb";
+import {
+  useGetMeQuery,
+  useGetWatchlistQuery,
+  useGetWatchedQuery,
+  useAddToWatchlistMutation,
+  useRemoveFromWatchlistMutation,
+  useMarkAsWatchedMutation,
+} from "@/app/_services/backendApi";
 
 interface MoviedetailsProps {
   movie: MovieDetailsType;
@@ -28,6 +37,27 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
   const hours = Math.floor(runtime / 60);
   const minutes = runtime % 60;
   const formattedRuntime = `${hours}h ${minutes}m`;
+
+  const { data: user } = useGetMeQuery();
+  const { data: watchlist = [] } = useGetWatchlistQuery(undefined, { skip: !user });
+  const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
+  const [addToWatchlist] = useAddToWatchlistMutation();
+  const [removeFromWatchlist] = useRemoveFromWatchlistMutation();
+  const [markAsWatched] = useMarkAsWatchedMutation();
+
+  const inWatchlist = watchlist.some(
+    (w) => w.tmdbId === movie.id && w.mediaType === "MOVIE",
+  );
+  const isWatched = watched.some(
+    (w) => w.tmdbId === movie.id && w.mediaType === "MOVIE",
+  );
+
+  const trackableMovie = {
+    tmdbId: movie.id,
+    mediaType: "MOVIE" as const,
+    title,
+    posterPath: poster_path,
+  };
 
   return (
     <div>
@@ -62,6 +92,39 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
               <p>Budget: {formatCurrency(budget)}</p>
               <p>Revenue: {formatCurrency(revenue)}</p>
             </div>
+
+            {user ? (
+              <div className="flex flex-wrap gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() =>
+                    inWatchlist
+                      ? removeFromWatchlist({ tmdbId: movie.id, mediaType: "MOVIE" })
+                      : addToWatchlist(trackableMovie)
+                  }
+                  className={`px-3 py-1 rounded-3xl text-sm ${
+                    inWatchlist ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
+                  }`}
+                >
+                  {inWatchlist ? "✓ In Watchlist" : "+ Add to Watchlist"}
+                </button>
+                <button
+                  type="button"
+                  disabled={isWatched}
+                  onClick={() => markAsWatched(trackableMovie)}
+                  className="px-3 py-1 rounded-3xl text-sm bg-gray-700 text-white disabled:opacity-60"
+                >
+                  {isWatched ? "✓ Watched" : "Mark as Watched"}
+                </button>
+              </div>
+            ) : (
+              <p className="mt-4 text-sm">
+                <Link href="/login" className="text-blue-500">
+                  Log in
+                </Link>{" "}
+                to add this to your watchlist or mark it as watched.
+              </p>
+            )}
 
             {trailer && (
               <div className="flex justify-center mt-5">
