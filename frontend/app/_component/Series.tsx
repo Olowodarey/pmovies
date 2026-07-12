@@ -7,7 +7,9 @@ const Series = () => {
     <div className="mt-10 mb-10">
       <div className=" lg:flex justify-center px- space-x-1 items-center">
         <div className="line">
-          <div className="flex justify-center text-xl font-bold lg:text-2xl text-ink">Series</div>
+          <div className="flex justify-center font-display text-xl font-bold tracking-tight lg:text-2xl text-ink">
+            Series
+          </div>
         </div>
       </div>
 

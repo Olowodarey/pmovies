@@ -14,8 +14,10 @@ const AnimatedMoviesPage = () => {
 
   return (
     <div>
-      <div className="flex justify-center lg:block mt-7 px-4 ">
-        <p className="text-xl font-bold"> check out Animated movies</p>
+      <div className="flex justify-center mt-7 px-4">
+        <p className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+          Animated Movies
+        </p>
       </div>
       <div className=" px-4 mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
         {moviesToDisplay.map((movie) => (

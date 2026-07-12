@@ -7,8 +7,10 @@ const Trending = () => {
 
   return (
     <div className="mt-5 lg:mt-10">
-      <div className="flex  px-2 space-x-12 items-center">
-        <h2 className="text-sm lg:text-xl font-bold text-ink">What&apos;s Trending</h2>
+      <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-6">
+        <h2 className="font-display text-xl lg:text-2xl font-bold tracking-tight text-ink">
+          What&apos;s Trending
+        </h2>
         <div className="flex border border-edge rounded-full">
           <button
             className={`px-4 py-1 text-sm rounded-full transition-colors ${

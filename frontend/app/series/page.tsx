@@ -13,8 +13,10 @@ const SeriesPage = () => {
 
   return (
     <div>
-      <div className="flex justify-center lg:block mt-7 ">
-        <p className="text-xl font-bold px-4"> check out Top rated  series</p>
+      <div className="flex justify-center mt-7 px-4">
+        <p className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+          Top Rated Series
+        </p>
       </div>
       <div className=" px-4  mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
         {seriesToDisplay.map((series) => (

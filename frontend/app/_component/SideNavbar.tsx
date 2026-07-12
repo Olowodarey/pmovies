@@ -36,38 +36,42 @@ export default function Navbar() {
       {/* Sidebar for desktop */}
       <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:overflow-y-auto lg:px-6">
         <nav className="flex-1 mt-[300px]">
-          <p className="px-4 mb-4 text-xs font-semibold uppercase tracking-widest text-ink-muted">
-            Browse
-          </p>
-          <ul role="list" className="space-y-1.5">
-            {navigation.map((item) => (
-              <li key={item.name}>
-                <Link href={item.href}>
-                  <div
-                    className={classNames(
-                      pathname === item.href
-                        ? "bg-brand text-brand-contrast shadow-md"
-                        : "text-ink-muted hover:bg-surface-hover hover:text-ink",
-                      "group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200"
-                    )}
-                  >
-                    <div className="flex items-center space-x-4">
-                      <item.icon
+          <div className="bg-surface border border-edge rounded-2xl shadow-sm p-4">
+            <p className="px-2 mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+              Browse
+            </p>
+            <ul role="list" className="space-y-1.5">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <li key={item.name}>
+                    <Link href={item.href}>
+                      <div
                         className={classNames(
-                          pathname === item.href
-                            ? "text-brand-contrast"
-                            : "text-ink-muted group-hover:text-brand",
-                          "h-5 w-5 flex items-center transition-colors duration-200"
+                          isActive
+                            ? "bg-brand text-brand-contrast shadow-md"
+                            : "text-ink-muted hover:bg-surface-hover hover:text-ink",
+                          "group flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200"
                         )}
-                        aria-hidden="true"
-                      />
-                      <span className="whitespace-nowrap text-[15px]">{item.name}</span>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                      >
+                        <span
+                          className={classNames(
+                            isActive
+                              ? "bg-transparent text-brand-contrast"
+                              : "bg-surface-alt text-ink-muted group-hover:text-brand",
+                            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-200"
+                          )}
+                        >
+                          <item.icon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <span className="whitespace-nowrap text-[15px]">{item.name}</span>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </nav>
       </div>
     </div>
