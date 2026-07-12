@@ -2,10 +2,10 @@
 nixPkgs = ['nodejs_22']
 
 [phases.install]
-cmds = ['cd backend && pnpm install --frozen-lockfile']
+cmds = ['pnpm install --frozen-lockfile']
 
 [phases.build]
-cmds = ['cd backend && pnpm run prisma:generate', 'cd backend && pnpm run build']
+cmds = ['pnpm --filter backend run prisma:generate', 'pnpm --filter backend run build']
 
 [start]
 cmd = 'cd backend && pnpm run prisma:migrate && node dist/main'
