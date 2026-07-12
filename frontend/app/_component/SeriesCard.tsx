@@ -1,11 +1,17 @@
-import React from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 import banner from "@/app/public/banner.png";
+import type { Series } from "@/app/_types/tmdb";
 
-const SeriesCard = ({ series }) => {
-  const title = series.title || series.name; 
+interface SeriesCardProps {
+  series: Series;
+}
+
+const SeriesCard = ({ series }: SeriesCardProps) => {
+  const title = series.title || series.name;
   const releaseDate = series.release_date || series.first_air_date;
-  const posterPath = series.poster_path ? `https://image.tmdb.org/t/p/w500${series.poster_path}` : banner;
+  const posterPath = series.poster_path
+    ? `https://image.tmdb.org/t/p/w500${series.poster_path}`
+    : banner;
 
   return (
     <div className="group relative w-full sm:w-[180px] border-2 p-2 rounded-md">
@@ -14,21 +20,18 @@ const SeriesCard = ({ series }) => {
           <Image
             alt={title}
             src={posterPath}
-            layout="fill"
-            objectFit="cover"
+            fill
             className="object-cover"
           />
         </div>
       </div>
       <h3 className="mt-4 text-sm sm:text-lg">
-        {title.length > 20? `${title.slice(0, 16)}...` : title}
+        {title.length > 20 ? `${title.slice(0, 16)}...` : title}
       </h3>
       <div className="mt-6 flex justify-between">
-        <p className="mt-1 text-xs sm:text-sm font-medium">
-          {releaseDate}
-        </p>
+        <p className="mt-1 text-xs sm:text-sm font-medium">{releaseDate}</p>
         <p className="mt-1 text-xs sm:text-sm font-medium text-yellow-500">
-          Rating: {series.vote_average.toFixed(1)} 
+          Rating: {series.vote_average.toFixed(1)}
         </p>
       </div>
     </div>

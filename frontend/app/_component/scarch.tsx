@@ -1,26 +1,25 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation"; // Use this for navigation
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Search = () => {
   const [query, setQuery] = useState("");
-  const router = useRouter(); // Initialize Next.js router
+  const router = useRouter();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
   const handleSearch = () => {
     if (query.trim()) {
-      router.push(`/searchresult?query=${query}`);
+      router.push(`/searchresult?query=${encodeURIComponent(query)}`);
       setQuery("");
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevents form submission issues
+      e.preventDefault();
       handleSearch();
     }
   };
@@ -31,7 +30,7 @@ const Search = () => {
         type="text"
         value={query}
         onChange={handleInputChange}
-        onKeyDown={handleKeyDown} // Listen for Enter key
+        onKeyDown={handleKeyDown}
         placeholder="Search for movies..."
         className="p-1 border rounded-md text-xs lg:text-base"
       />

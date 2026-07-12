@@ -1,16 +1,15 @@
 "use client";
-import React from "react";
 import { useFetchSeriesQuery } from "@/app/_services/fetchquerry";
 import SeriesCard from "@/app/_component/SeriesCard";
 import Loading from "../Loading";
 
-const page = () => {
+const SeriesPage = () => {
   const { data, error, isLoading } = useFetchSeriesQuery();
 
   if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading/></div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error loading series</div>;
 
-  const seriesToDisplay = data?.results;
+  const seriesToDisplay = data?.results || [];
 
   return (
     <div>
@@ -26,4 +25,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SeriesPage;

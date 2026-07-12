@@ -10,7 +10,13 @@ import {
   HomeIcon,
 } from "@heroicons/react/24/outline";
 
-const navigation = [
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+
+const navigation: NavigationItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Trending movies", href: "/Trending", icon: FireIcon },
   { name: "Upcoming movies", href: "/upcomingMovies", icon: EyeIcon },
@@ -18,7 +24,7 @@ const navigation = [
   { name: "Series", href: "/series", icon: ForwardIcon },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -33,7 +39,7 @@ export default function Navbar() {
           <ul role="list" className="space-y-2">
             {navigation.map((item) => (
               <li key={item.name}>
-                <Link href={item.href} passHref>
+                <Link href={item.href}>
                   <div
                     className={classNames(
                       pathname === item.href
@@ -42,9 +48,8 @@ export default function Navbar() {
                       "group flex items-center px-4 py-3 text-sm font-medium rounded-md"
                     )}
                   >
-                    
                     <div className="flex items-center  space-x-5 ">
-                      <item.icon className="h-5 w-5  text-gray-400 flex items-center" aria-hidden="true"  />
+                      <item.icon className="h-5 w-5  text-gray-400 flex items-center" aria-hidden="true" />
                       <span className="whitespace-nowrap text-[17px] mt-2  ">{item.name}</span>
                     </div>
                   </div>

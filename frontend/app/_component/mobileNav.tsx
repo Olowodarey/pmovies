@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 import { IoIosMenu } from "react-icons/io";
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   EyeIcon,
   FaceSmileIcon,
@@ -12,7 +12,13 @@ import {
   HomeIcon,
 } from "@heroicons/react/24/outline";
 
-const navigation = [
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+
+const navigation: NavigationItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Trending movies", href: "/Trending", icon: FireIcon },
   { name: "Upcoming movies", href: "/upcomingMovies", icon: EyeIcon },
@@ -20,7 +26,7 @@ const navigation = [
   { name: "Series", href: "/series", icon: ForwardIcon },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -40,7 +46,7 @@ export default function MobileNavbar() {
     <div>
       <div className="lg:hidden flex justify-end">
         <button onClick={toggleMobile} className="text-gray-300">
-          {mobileOpen ? <ImCancelCircle className="hidden"  /> : <IoIosMenu size={35} />} 
+          {mobileOpen ? <ImCancelCircle className="hidden" /> : <IoIosMenu size={35} />}
         </button>
       </div>
 
@@ -61,9 +67,9 @@ export default function MobileNavbar() {
                 <ul role="list" className="space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <Link href={item.href} passHref>
+                      <Link href={item.href}>
                         <div
-                          onClick={closeMobileMenu} 
+                          onClick={closeMobileMenu}
                           className={classNames(
                             pathname === item.href
                               ? "bg-gray-800 text-white"

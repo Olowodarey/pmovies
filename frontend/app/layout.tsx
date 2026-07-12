@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_component/SideNavbar";
@@ -11,7 +13,7 @@ const josefinSans = Josefin_Sans({
   weight: ["400", "700"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     template: " %s / movie page",
     default: "movie collection",
@@ -19,7 +21,7 @@ export const metadata = {
   description: "movie",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <ReduxProvider>

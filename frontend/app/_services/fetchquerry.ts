@@ -1,54 +1,63 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type {
+  Movie,
+  MovieDetails,
+  PaginatedResponse,
+  Series,
+  Video,
+} from "@/app/_types/tmdb";
 
-const API_KEY = '8452b73599d162bf3f2a5b911e2849e9';
-const BASE_URL = 'https://api.themoviedb.org/3/';
+const BASE_URL = "https://api.themoviedb.org/3/";
+const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
 
-const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NDUyYjczNTk5ZDE2MmJmM2YyYTViOTExZTI4NDllOSIsIm5iZiI6MTczNDYzMzQwNS43MTI5OTk4LCJzdWIiOiI2NzY0NjdiZGU1NDEzM2ZjOGFhNGZjNjAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.aDSDj83dRSLrbiAILtX-6K9jKTaTQyKd8Zj5zPn79Hk';
+interface VideoResponse {
+  results: Video[];
+}
 
 export const tmdbApi = createApi({
-  reducerPath: 'tmdbApi',
+  reducerPath: "tmdbApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
-      headers.set('Authorization', `Bearer ${ACCESS_TOKEN}`);
+      headers.set("Authorization", `Bearer ${ACCESS_TOKEN}`);
       return headers;
     },
   }),
   endpoints: (builder) => ({
-    fetchTrendingMovies: builder.query({
-      query: (timeWindow = 'day') => `trending/movie/${timeWindow}`,
+    fetchTrendingMovies: builder.query<PaginatedResponse<Movie>, "day" | "week" | void>({
+      query: (timeWindow = "day") => `trending/movie/${timeWindow}`,
     }),
-    fetchUpComing: builder.query({
-      query: () => `movie/upcoming`
+    fetchUpComing: builder.query<PaginatedResponse<Movie>, void>({
+      query: () => `movie/upcoming`,
     }),
-    fetchSeries: builder.query({
-      query: () => `tv/top_rated`
+    fetchSeries: builder.query<PaginatedResponse<Series>, void>({
+      query: () => `tv/top_rated`,
     }),
-    fetchAnimatedMovies: builder.query({ 
+    fetchAnimatedMovies: builder.query<PaginatedResponse<Movie>, void>({
       query: () => `discover/movie?with_genres=16`,
-     }),
-     fetchMovieById: builder.query({ 
-      query: (id) => `movie/${id}` 
     }),
-    fetchMovieVideo: builder.query({
-      query: (id) => `movie/${id}/videos`
+    fetchMovieById: builder.query<MovieDetails, string | string[]>({
+      query: (id) => `movie/${id}`,
     }),
-    fetchSimilarMovies: builder.query({
-      query: (id) => `movie/${id}/similar`
+    fetchMovieVideo: builder.query<VideoResponse, string | string[]>({
+      query: (id) => `movie/${id}/videos`,
     }),
-    fetchSearchMovies: builder.query({
-      query: (title) => `search/movie?query=${title}&api_key=${API_KEY}`
-    })
+    fetchSimilarMovies: builder.query<PaginatedResponse<Movie>, string | string[]>({
+      query: (id) => `movie/${id}/similar`,
+    }),
+    fetchSearchMovies: builder.query<PaginatedResponse<Movie>, string>({
+      query: (title) => `search/movie?query=${encodeURIComponent(title)}`,
+    }),
   }),
 });
 
-export const { 
+export const {
   useFetchTrendingMoviesQuery,
-  useFetchUpComingQuery, 
-  useFetchSeriesQuery, 
-  useFetchAnimatedMoviesQuery, 
-  useFetchMovieByIdQuery, 
-  useFetchMovieVideoQuery, 
+  useFetchUpComingQuery,
+  useFetchSeriesQuery,
+  useFetchAnimatedMoviesQuery,
+  useFetchMovieByIdQuery,
+  useFetchMovieVideoQuery,
   useFetchSimilarMoviesQuery,
-  useFetchSearchMoviesQuery
+  useFetchSearchMoviesQuery,
 } = tmdbApi;

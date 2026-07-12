@@ -1,16 +1,19 @@
 "use client";
-import React from "react";
 import banner from "@/app/public/banner.png";
 import Image from "next/image";
 import { FaRegCalendarTimes } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
-import { IoTime } from "react-icons/io5";
+import type { MovieDetails as MovieDetailsType } from "@/app/_types/tmdb";
 
-const formatCurrency = (amount) => {
+interface MoviedetailsProps {
+  movie: MovieDetailsType;
+  trailer?: string;
+}
+
+const formatCurrency = (amount: number) => {
   return amount ? `$${amount.toLocaleString()}` : "N/A";
 };
 
-const Moviedetails = ({ movie, trailer }) => {  
+const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
   const {
     title,
     overview,
@@ -33,9 +36,9 @@ const Moviedetails = ({ movie, trailer }) => {
           {/* Image gallery */}
           <div className="relative h-[400px] w-full sm:w-[400px] sm:h-[500px] overflow-hidden rounded-lg bg-gray-500 flex items-center justify-center">
             <Image
-              src={`https://image.tmdb.org/t/p/w500${poster_path || banner}`}
+              src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : banner}
               alt={title}
-              layout="fill"
+              fill
               className="object-cover"
             />
           </div>
@@ -48,11 +51,9 @@ const Moviedetails = ({ movie, trailer }) => {
                 <span>{release_date}</span>
               </p>
               <p className="flex items-center space-x-1 text-sm font-medium">
-              
                 <span>Genre: {genres.map((genre) => genre.name).join(",")}</span>
               </p>
               <p className="flex items-center space-x-2 text-sm font-medium">
-               
                 <span>Duration: {formattedRuntime}</span>
               </p>
             </div>
@@ -62,21 +63,16 @@ const Moviedetails = ({ movie, trailer }) => {
               <p>Revenue: {formatCurrency(revenue)}</p>
             </div>
 
-            
             {trailer && (
-            <div className="flex justify-center mt-5">
-            <iframe
-              className="rounded-lg shadow-lg w-full sm:w-[600px] h-[200px] sm:h-[260px]"
-              src={`https://www.youtube.com/embed/${trailer}?autoplay=1`}
-
-              title="Movie Trailer"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-
-              
+              <div className="flex justify-center mt-5">
+                <iframe
+                  className="rounded-lg shadow-lg w-full sm:w-[600px] h-[200px] sm:h-[260px]"
+                  src={`https://www.youtube.com/embed/${trailer}?autoplay=1`}
+                  title="Movie Trailer"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
             )}
           </div>
         </div>
