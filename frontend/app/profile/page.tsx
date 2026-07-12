@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   useGetMeQuery,
   useGetWatchlistQuery,
@@ -65,9 +66,19 @@ const ProfilePage = () => {
     <div className="px-5 lg:px-7 mt-7">
       {/* Profile header */}
       <div className="flex items-center gap-4 border-2 border-gray-800 rounded-md p-4">
-        <div className="h-16 w-16 shrink-0 rounded-full bg-blue-700 flex items-center justify-center text-xl font-bold">
-          {initials}
-        </div>
+        {user.avatarUrl ? (
+          <Image
+            src={user.avatarUrl}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <div className="h-16 w-16 shrink-0 rounded-full bg-blue-700 flex items-center justify-center text-xl font-bold">
+            {initials}
+          </div>
+        )}
         <div>
           <h1 className="text-xl font-bold">{user.name || user.email}</h1>
           <p className="text-sm text-gray-400">Member since {joinDate}</p>

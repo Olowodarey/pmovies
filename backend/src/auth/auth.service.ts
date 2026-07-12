@@ -16,6 +16,13 @@ export interface JwtPayload {
   email: string;
 }
 
+export interface GoogleProfile {
+  googleId: string;
+  email: string;
+  name?: string;
+  avatarUrl?: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,12 +34,14 @@ export class AuthService {
     id: string;
     email: string;
     name: string | null;
+    avatarUrl: string | null;
     createdAt: Date;
   }) {
     return {
       id: user.id,
       email: user.email,
       name: user.name,
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
     };
   }
@@ -62,13 +71,48 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (!user) {
+    if (!user || !user.passwordHash) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
     const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const token = this.signToken({ sub: user.id, email: user.email });
+    return { user: this.toPublicUser(user), token };
+  }
+
+  async loginWithGoogle(profile: GoogleProfile) {
+    let user = await this.prisma.user.findUnique({
+      where: { googleId: profile.googleId },
+    });
+
+    if (!user) {
+      // Link to an existing password account with the same (Google-verified)
+      // email if one exists, otherwise create a fresh account.
+      const existingByEmail = await this.prisma.user.findUnique({
+        where: { email: profile.email },
+      });
+
+      user = existingByEmail
+        ? await this.prisma.user.update({
+            where: { id: existingByEmail.id },
+            data: {
+              googleId: profile.googleId,
+              avatarUrl: existingByEmail.avatarUrl ?? profile.avatarUrl,
+              name: existingByEmail.name ?? profile.name,
+            },
+          })
+        : await this.prisma.user.create({
+            data: {
+              email: profile.email,
+              googleId: profile.googleId,
+              name: profile.name,
+              avatarUrl: profile.avatarUrl,
+            },
+          });
     }
 
     const token = this.signToken({ sub: user.id, email: user.email });

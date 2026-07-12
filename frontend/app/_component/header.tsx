@@ -44,7 +44,17 @@ const Header = () => {
             className="text-gray-50"
             aria-label={user ? "Profile" : "Log in"}
           >
-            <FaUserCircle className="h-5 w-5" />
+            {user?.avatarUrl ? (
+              <Image
+                src={user.avatarUrl}
+                alt=""
+                width={20}
+                height={20}
+                className="rounded-full"
+              />
+            ) : (
+              <FaUserCircle className="h-5 w-5" />
+            )}
           </Link>
 
           <button

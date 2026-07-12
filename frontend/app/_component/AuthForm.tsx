@@ -3,7 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 import { useLoginMutation, useSignupMutation } from "@/app/_services/backendApi";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000";
 
 interface AuthFormProps {
   mode: "login" | "signup";
@@ -94,6 +97,20 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             {isLoading ? "Please wait..." : isLogin ? "Log in" : "Sign up"}
           </button>
         </form>
+
+        <div className="flex items-center gap-3 mt-5">
+          <span className="h-px flex-1 bg-gray-700" />
+          <span className="text-xs text-gray-400">or</span>
+          <span className="h-px flex-1 bg-gray-700" />
+        </div>
+
+        <a
+          href={`${BACKEND_URL}/auth/google`}
+          className="mt-5 w-full flex items-center justify-center gap-2 border rounded-md py-2 text-sm font-medium"
+        >
+          <FcGoogle className="h-5 w-5" />
+          Continue with Google
+        </a>
 
         <p className="mt-4 text-sm text-center text-gray-400">
           {isLogin ? (
