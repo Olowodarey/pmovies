@@ -1,11 +1,23 @@
 // Client-side TMDB queries — only used by interactive client components
-// (people search, home-page trending preview with day/week toggle).
+// (people page, home-page trending preview with day/week toggle).
 // All full-page TMDB fetching uses the server-side tmdb helper instead.
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Movie, PaginatedResponse, Person, Series } from "@/app/_types/tmdb";
+import type {
+  Movie,
+  MovieCredit,
+  PaginatedResponse,
+  Person,
+  PersonDetails,
+  Series,
+} from "@/app/_types/tmdb";
 
 const BASE_URL = "https://api.themoviedb.org/3/";
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
+
+interface PersonMovieCredits {
+  cast: MovieCredit[];
+  crew: (MovieCredit & { job: string; department: string })[];
+}
 
 export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
@@ -33,13 +45,21 @@ export const tmdbApi = createApi({
     fetchSeries: builder.query<PaginatedResponse<Series>, number | void>({
       query: (page = 1) => `tv/top_rated?page=${page}`,
     }),
-    // People search (interactive, client-driven)
-    fetchSearchPerson: builder.query<PaginatedResponse<Person>, string>({
-      query: (name) => `search/person?query=${encodeURIComponent(name)}`,
+    // Popular people (people page default grid)
+    fetchPopularPeople: builder.query<PaginatedResponse<Person>, number>({
+      query: (page) => `person/popular?page=${page}`,
     }),
-    fetchPersonMovies: builder.query<PaginatedResponse<Movie>, number>({
-      query: (personId) =>
-        `discover/movie?with_cast=${personId}&sort_by=popularity.desc`,
+    // People search
+    fetchSearchPerson: builder.query<PaginatedResponse<Person>, string>({
+      query: (name) => `search/person?query=${encodeURIComponent(name)}&include_adult=false`,
+    }),
+    // Full person bio + stats
+    fetchPersonDetails: builder.query<PersonDetails, number>({
+      query: (id) => `person/${id}`,
+    }),
+    // All movie credits for a person (cast + crew)
+    fetchPersonMovieCredits: builder.query<PersonMovieCredits, number>({
+      query: (id) => `person/${id}/movie_credits`,
     }),
   }),
 });
@@ -48,6 +68,8 @@ export const {
   useFetchTrendingMoviesQuery,
   useFetchUpComingQuery,
   useFetchSeriesQuery,
+  useFetchPopularPeopleQuery,
   useFetchSearchPersonQuery,
-  useFetchPersonMoviesQuery,
+  useFetchPersonDetailsQuery,
+  useFetchPersonMovieCreditsQuery,
 } = tmdbApi;

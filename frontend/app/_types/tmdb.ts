@@ -83,5 +83,33 @@ export interface Person {
   name: string;
   profile_path: string | null;
   known_for_department: string;
+  popularity?: number;
   known_for: Movie[];
+}
+
+export interface PersonDetails {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  gender: number;
+  homepage: string | null;
+  imdb_id: string | null;
+  known_for_department: string;
+  place_of_birth: string | null;
+  popularity: number;
+  profile_path: string | null;
+  also_known_as: string[];
+}
+
+export interface MovieCredit {
+  id: number;
+  title: string;
+  character: string;
+  poster_path: string | null;
+  release_date: string;
+  vote_average: number;
+  popularity: number;
+  overview: string;
 }
