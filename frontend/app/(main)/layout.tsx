@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Navbar from "@/app/_component/SideNavbar";
 import Header from "@/app/_component/header";
 import Footer from "@/app/_component/Footer";
+import WelcomeModal from "@/app/_component/WelcomeModal";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       </div>
 
       <Footer />
+      <WelcomeModal />
     </>
   );
 }

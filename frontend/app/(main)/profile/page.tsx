@@ -24,7 +24,12 @@ const ProfilePage = () => {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("watchlist");
 
-  const { data: user, isLoading: meLoading, isError: meError } = useGetMeQuery();
+  const {
+    data: user,
+    isLoading: meLoading,
+    isFetching: meFetching,
+    isError: meError,
+  } = useGetMeQuery();
   const { data: watchlist = [] } = useGetWatchlistQuery(undefined, { skip: !user });
   const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
 
@@ -35,12 +40,15 @@ const ProfilePage = () => {
   const [updateRating] = useUpdateWatchedRatingMutation();
 
   useEffect(() => {
-    if (!meLoading && meError) {
+    // Only redirect once the query has actually settled: not on stale errors
+    // from a previous unauthenticated fetch that RTK Query is currently
+    // refetching after a login-triggered `invalidatesTags: ["Me"]`.
+    if (!meLoading && !meFetching && meError && !user) {
       router.replace("/login");
     }
-  }, [meLoading, meError, router]);
+  }, [meLoading, meFetching, meError, user, router]);
 
-  if (meLoading || !user) {
+  if (meLoading || meFetching || !user) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loading />
