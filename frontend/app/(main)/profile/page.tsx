@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -15,6 +14,7 @@ import {
   useRemoveWatchedMutation,
   useUpdateWatchedRatingMutation,
 } from "@/app/_services/backendApi";
+
 import TrackedMovieCard from "@/app/_component/TrackedMovieCard";
 import Loading from "@/app/Loading";
 import {
@@ -49,15 +49,11 @@ const StatCard = ({
 );
 
 const ProfilePage = () => {
-  const router = useRouter();
   const [tab, setTab] = useState<Tab>("watchlist");
 
-  const {
-    data: user,
-    isLoading: meLoading,
-    isFetching: meFetching,
-    isError: meError,
-  } = useGetMeQuery();
+  // Middleware already guarantees a token cookie exists before this renders.
+  // We just need to fetch the user and show loading while that happens.
+  const { data: user, isLoading: meLoading, isFetching: meFetching } = useGetMeQuery();
   const { data: watchlist = [] } = useGetWatchlistQuery(undefined, { skip: !user });
   const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
   const { data: stats } = useGetUserStatsQuery(undefined, { skip: !user });
@@ -67,12 +63,6 @@ const ProfilePage = () => {
   const [markAsWatched] = useMarkAsWatchedMutation();
   const [removeWatched] = useRemoveWatchedMutation();
   const [updateRating] = useUpdateWatchedRatingMutation();
-
-  useEffect(() => {
-    if (!meLoading && !meFetching && meError && !user) {
-      router.replace("/login");
-    }
-  }, [meLoading, meFetching, meError, user, router]);
 
   if (meLoading || meFetching || !user) {
     return (
