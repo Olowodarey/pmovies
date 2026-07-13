@@ -1,47 +1,44 @@
-"use client";
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { tmdb } from "@/app/_services/tmdb";
 import MovieCard from "@/app/_component/movieCard";
-import { useFetchSearchMoviesQuery } from "@/app/_services/fetchquerry";
-import Loading from "@/app/Loading";
 
-const SearchResults = () => {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") ?? "";
-  const { data: movies, error, isLoading } = useFetchSearchMoviesQuery(query, {
-    skip: !query,
-  });
+type Props = {
+  searchParams: Promise<{ query?: string }>;
+};
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center h-screen"><Loading /></div>;
+export default async function SearchResultPage({ searchParams }: Props) {
+  const { query = "" } = await searchParams;
+
+  if (!query.trim()) {
+    return (
+      <p className="mt-10 text-center text-ink-muted">
+        Enter a movie name in the search bar above.
+      </p>
+    );
   }
 
-  if (error || !movies?.results?.length) {
+  const data = await tmdb.search(query);
+
+  if (!data.results.length) {
     return (
-      <p className="mt-10 text-2xl font-bold flex pr-[120px] justify-center text-ink-muted">
-        No movie found for {query}
+      <p className="mt-10 text-2xl font-bold flex justify-center text-ink-muted">
+        No movie found for &quot;{query}&quot;
       </p>
     );
   }
 
   return (
-    <div>
-      <h1 className="mt-10 text-2xl font-bold flex pr-[120px] justify-center">
-        Search Results for {query}
+    <div className="px-5 lg:px-7 mt-7 pb-16">
+      <h1 className="text-xl font-bold text-ink">
+        Results for &quot;{query}&quot;
+        <span className="ml-2 text-sm font-normal text-ink-muted">
+          ({data.total_results} found)
+        </span>
       </h1>
-      <div className="px-5 movie-grid grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mt-8">
-        {movies.results.map((movie) => (
+      <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
+        {data.results.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </div>
-  );
-};
-
-export default function App() {
-  return (
-    <Suspense fallback={<Loading />}>
-      <SearchResults />
-    </Suspense>
   );
 }

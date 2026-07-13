@@ -1,61 +1,38 @@
-"use client";
+import { tmdb } from "@/app/_services/tmdb";
 import Moviedetails from "@/app/_component/moviedetails";
 import MovieCard from "@/app/_component/movieCard";
-import { useParams } from "next/navigation";
-import {
-  useFetchMovieByIdQuery,
-  useFetchMovieVideoQuery,
-  useFetchSimilarMoviesQuery,
-} from "@/app/_services/fetchquerry";
-import Loading from "@/app/Loading";
 
-const Moviepage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: movie, error: movieError, isLoading: movieLoading } = useFetchMovieByIdQuery(id);
-  const { data: videoData, error: videoError, isLoading: videoLoading } = useFetchMovieVideoQuery(id);
-  const {
-    data: similarMoviesData,
-    error: similarMoviesError,
-    isLoading: similarMoviesLoading,
-  } = useFetchSimilarMoviesQuery(id);
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
-  if (movieLoading || videoLoading || similarMoviesLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg"><Loading /></p>
-      </div>
-    );
-  }
+export default async function MoviePage({ params }: Props) {
+  const { id } = await params;
 
-  if (movieError || videoError || similarMoviesError || !movie) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg font-semibold text-danger">
-          Error loading movie. Please try again later.
-        </p>
-      </div>
-    );
-  }
+  // All three fetched in parallel — each independently cached on the server
+  const [movie, videoData, similarData] = await Promise.all([
+    tmdb.movieById(id),
+    tmdb.movieVideos(id),
+    tmdb.similarMovies(id),
+  ]);
 
-  const trailer = videoData?.results.find(
-    (video) => video.type === "Trailer" && video.site === "YouTube"
+  const trailer = videoData.results.find(
+    (v) => v.type === "Trailer" && v.site === "YouTube",
   )?.key;
 
   return (
     <div>
+      {/* Moviedetails stays "use client" — it uses RTK Query for watchlist/watched buttons */}
       <Moviedetails movie={movie} trailer={trailer} />
 
-      {/* Similar Movies Section */}
-      <div className="mt-10">
-        <h2 className="flex justify-center text-2xl font-bold">Similar Movies</h2>
+      <div className="mt-10 pb-16">
+        <h2 className="flex justify-center text-2xl font-bold text-ink">Similar Movies</h2>
         <div className="mt-5 px-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-          {similarMoviesData?.results.slice(0, 8).map((similarMovie) => (
-            <MovieCard key={similarMovie.id} movie={similarMovie} />
+          {similarData.results.slice(0, 8).map((m) => (
+            <MovieCard key={m.id} movie={m} />
           ))}
         </div>
       </div>
     </div>
   );
-};
-
-export default Moviepage;
+}

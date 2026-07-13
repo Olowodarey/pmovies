@@ -1,4 +1,3 @@
-"use client";
 import UpcomingList from "./UpcomingList";
 import Link from "next/link";
 

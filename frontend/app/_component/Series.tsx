@@ -1,4 +1,3 @@
-"use client";
 import SeriesList from "@/app/_component/SeriesList";
 import Link from "next/link";
 

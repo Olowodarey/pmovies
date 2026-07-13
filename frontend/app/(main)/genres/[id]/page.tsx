@@ -1,97 +1,71 @@
-"use client";
-
-import { useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useFetchMoviesByGenreQuery } from "@/app/_services/fetchquerry";
+import Link from "next/link";
+import { tmdb } from "@/app/_services/tmdb";
 import MovieCard from "@/app/_component/movieCard";
-import Loading from "@/app/Loading";
+import PaginationControls from "@/app/_component/PaginationControls";
 
 const DECADES = [
-  { label: "All time", value: undefined },
-  { label: "2020s", value: 2020 },
-  { label: "2010s", value: 2010 },
-  { label: "2000s", value: 2000 },
-  { label: "1990s", value: 1990 },
-  { label: "1980s", value: 1980 },
-  { label: "1970s", value: 1970 },
+  { label: "All time", value: "" },
+  { label: "2020s", value: "2020" },
+  { label: "2010s", value: "2010" },
+  { label: "2000s", value: "2000" },
+  { label: "1990s", value: "1990" },
+  { label: "1980s", value: "1980" },
+  { label: "1970s", value: "1970" },
 ];
 
-export default function GenreMoviesPage() {
-  const { id } = useParams<{ id: string }>();
-  const searchParams = useSearchParams();
-  const genreName = searchParams.get("name") ?? "Genre";
-  const [decade, setDecade] = useState<number | undefined>(undefined);
-  const [page, setPage] = useState(1);
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ name?: string; decade?: string; page?: string }>;
+};
 
-  const { data, isLoading, error } = useFetchMoviesByGenreQuery({
-    genreId: Number(id),
-    decade,
-    page,
-  });
+export default async function GenreMoviesPage({ params, searchParams }: Props) {
+  const { id } = await params;
+  const { name = "Genre", decade: decadeStr = "", page: pageStr = "1" } = await searchParams;
+
+  const decade = decadeStr ? Number(decadeStr) : undefined;
+  const page = Math.max(1, Number(pageStr) || 1);
+
+  const data = await tmdb.byGenre(Number(id), decade, page);
+
+  const buildHref = (p: number) => {
+    const base = `/genres/${id}?name=${encodeURIComponent(name)}`;
+    return `${base}${decadeStr ? `&decade=${decadeStr}` : ""}&page=${p}`;
+  };
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="font-display text-2xl font-bold text-ink">{genreName} Movies</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">{name} Movies</h1>
 
-        {/* Decade filter */}
+        {/* Decade filter — pure Links */}
         <div className="flex flex-wrap gap-2">
           {DECADES.map((d) => (
-            <button
+            <Link
               key={d.label}
-              type="button"
-              onClick={() => { setDecade(d.value); setPage(1); }}
+              href={`/genres/${id}?name=${encodeURIComponent(name)}${d.value ? `&decade=${d.value}` : ""}&page=1`}
               className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-                decade === d.value
+                (decadeStr ?? "") === d.value
                   ? "bg-brand text-brand-contrast border-brand"
                   : "border-edge text-ink-muted hover:text-ink"
               }`}
             >
               {d.label}
-            </button>
+            </Link>
           ))}
         </div>
       </div>
 
-      {isLoading && (
-        <div className="flex justify-center mt-20"><Loading /></div>
-      )}
-      {error && (
-        <p className="mt-10 text-center text-danger">Failed to load movies.</p>
-      )}
+      <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
+        {data.results.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </div>
 
-      {data && (
-        <>
-          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
-            {data.results.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className="flex items-center justify-center gap-3 mt-10">
-            <button
-              type="button"
-              disabled={page === 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="px-4 py-1.5 rounded-full border border-edge text-sm text-ink-muted hover:text-ink disabled:opacity-40 transition-colors"
-            >
-              ← Prev
-            </button>
-            <span className="text-sm text-ink-muted">
-              Page {page} of {data.total_pages}
-            </span>
-            <button
-              type="button"
-              disabled={page >= data.total_pages}
-              onClick={() => setPage((p) => p + 1)}
-              className="px-4 py-1.5 rounded-full border border-edge text-sm text-ink-muted hover:text-ink disabled:opacity-40 transition-colors"
-            >
-              Next →
-            </button>
-          </div>
-        </>
-      )}
+      <PaginationControls
+        page={page}
+        totalPages={data.total_pages}
+        buildHref={buildHref}
+      />
     </div>
   );
 }

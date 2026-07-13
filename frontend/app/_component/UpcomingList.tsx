@@ -1,18 +1,13 @@
-import { useFetchUpComingQuery } from "@/app/_services/fetchquerry";
+import { tmdb } from "@/app/_services/tmdb";
 import MovieCard from "@/app/_component/movieCard";
-import Loading from "../Loading";
 
-const UpcomingList = () => {
-  const { data, error, isLoading } = useFetchUpComingQuery();
-
-  if (isLoading) return <div className="flex items-center justify-center h-screen"><Loading /></div>;
-  if (error) return <div className="p-6 text-center text-danger">Error loading upcoming movies</div>;
-
-  const moviesToDisplay = data?.results.slice(0, 12) || [];
+const UpcomingList = async () => {
+  const data = await tmdb.upcoming(1);
+  const movies = data.results.slice(0, 12);
 
   return (
-    <div className=" mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
-      {moviesToDisplay.map((movie) => (
+    <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
+      {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
       ))}
     </div>
