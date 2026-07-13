@@ -7,7 +7,13 @@ import type {
   WatchlistItem,
 } from "@/app/_types/backend";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000";
+// Route all API calls through /api/backend so the session cookie stays first-party.
+// In dev, Next's rewrites hit http://localhost:4000; in prod, they hit the Railway URL.
+// Direct-origin fallback for early dev before rewrites are wired.
+const BASE_URL =
+  typeof window !== "undefined"
+    ? "/api/backend"
+    : process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000";
 
 interface SignupBody {
   email: string;

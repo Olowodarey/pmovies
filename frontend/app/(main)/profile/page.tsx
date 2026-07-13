@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -49,11 +50,23 @@ const StatCard = ({
 );
 
 const ProfilePage = () => {
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>("watchlist");
 
-  // Middleware already guarantees a token cookie exists before this renders.
-  // We just need to fetch the user and show loading while that happens.
-  const { data: user, isLoading: meLoading, isFetching: meFetching } = useGetMeQuery();
+  // Force a fresh fetch every mount — never trust a cached error from a prior
+  // unauthenticated visit. This is the key fix for cross-domain auth flow:
+  // backend cookie is on Railway domain, so /auth/me is the only way for the
+  // frontend to know if we're actually logged in.
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+    isError,
+    isSuccess,
+  } = useGetMeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
   const { data: watchlist = [] } = useGetWatchlistQuery(undefined, { skip: !user });
   const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
   const { data: stats } = useGetUserStatsQuery(undefined, { skip: !user });
@@ -64,7 +77,18 @@ const ProfilePage = () => {
   const [removeWatched] = useRemoveWatchedMutation();
   const [updateRating] = useUpdateWatchedRatingMutation();
 
-  if (meLoading || meFetching || !user) {
+  // Only redirect after the fetch has definitively settled AND failed.
+  useEffect(() => {
+    if (!isLoading && !isFetching && isError && !user) {
+      router.replace("/login");
+    }
+  }, [isLoading, isFetching, isError, user, router]);
+
+  // Show loading while:
+  //  - the initial fetch is still going, OR
+  //  - the query hasn't fetched yet (isUninitialized / no data / no error)
+  // Only render the profile once we have a confirmed user object.
+  if (!isSuccess || !user) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loading />
