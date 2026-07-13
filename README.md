@@ -14,7 +14,8 @@ A full-stack movie discovery and tracking app. Browse trending, upcoming, and to
 
 ## Features
 
-**Discover**
+### Discover
+
 - Trending movies (day / week)
 - Upcoming, top-rated, animated
 - Top-rated TV series
@@ -23,19 +24,22 @@ A full-stack movie discovery and tracking app. Browse trending, upcoming, and to
 - Similar-movies section on every title
 - Auto-embedded YouTube trailer
 
-**Track**
+### Track
+
 - Save titles to a personal watchlist
 - Mark titles as watched with a 1–5 star rating
 - Full watch history with timestamps
 
-**Stats**
+### Stats
+
 - Total watched, watchlist size
 - Watched this month / this year
 - Movie vs TV breakdown
 - Average star rating
 - Top genres (auto-derived from watched titles)
 
-**Auth**
+### Auth
+
 - Email + password with hashed credentials (bcrypt)
 - Google OAuth 2.0
 - JWT stored in an HTTP-only cookie
@@ -44,15 +48,16 @@ A full-stack movie discovery and tracking app. Browse trending, upcoming, and to
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, Framer Motion |
-| **State** | Redux Toolkit + RTK Query |
-| **Backend** | NestJS 11, TypeScript |
-| **Database** | PostgreSQL via Prisma 7 |
-| **Auth** | JWT, Passport (Google OAuth 2.0), bcrypt |
-| **External API** | TMDB (The Movie Database) |
-| **Hosting** | Vercel (frontend) + Railway (backend + Postgres) |
+| Layer         | Technology                                                    |
+| ------------- | ------------------------------------------------------------- |
+| Frontend      | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS   |
+| Animation     | Framer Motion                                                 |
+| State         | Redux Toolkit + RTK Query                                     |
+| Backend       | NestJS 11, TypeScript                                         |
+| Database      | PostgreSQL via Prisma 7                                       |
+| Auth          | JWT, Passport (Google OAuth 2.0), bcrypt                      |
+| External API  | TMDB (The Movie Database)                                     |
+| Hosting       | Vercel (frontend) + Railway (backend + Postgres)              |
 
 ---
 
@@ -60,9 +65,9 @@ A full-stack movie discovery and tracking app. Browse trending, upcoming, and to
 
 ### 1. Server Components + Selective RTK Query
 
-TMDB data (public, cacheable) is fetched in **React Server Components** using Next.js's `fetch` + `revalidate` — the TMDB token stays server-side and cached responses are shared across all users. User-specific data (watchlist, watched, stats) uses **RTK Query** on the client with proper cache invalidation.
+TMDB data (public, cacheable) is fetched in React Server Components using Next.js's `fetch` + `revalidate` — the TMDB token stays server-side and cached responses are shared across all users. User-specific data (watchlist, watched, stats) uses RTK Query on the client with proper cache invalidation.
 
-```
+```text
 Public data      →  Server Components   →  Next.js edge cache (1h–7d)
 User-specific    →  RTK Query client    →  Session cookie sent per request
 ```
@@ -77,7 +82,7 @@ Solution: Next.js `rewrites` proxy all backend calls through the frontend origin
 { source: "/api/backend/:path*", destination: `${BACKEND}/:path*` }
 ```
 
-The browser now sees the auth cookie as **first-party** (attributed to `pmovies-hub.vercel.app` even though the backend actually sets it), so it's never blocked. Google OAuth callback is also routed through this proxy for the same reason.
+The browser now sees the auth cookie as first-party (attributed to `pmovies-hub.vercel.app` even though the backend actually sets it), so it's never blocked. Google OAuth callback is also routed through this proxy for the same reason.
 
 ### 3. Denormalized Genre IDs for Fast Stats
 
@@ -91,7 +96,7 @@ Single repo, two independent apps sharing types where useful. Backend and fronte
 
 ## Project Structure
 
-```
+```text
 pmovies/
 ├── backend/                    # NestJS API
 │   ├── prisma/
@@ -125,6 +130,7 @@ pmovies/
 ## Local Development
 
 ### Prerequisites
+
 - Node.js ≥ 22.12
 - pnpm ≥ 10
 - PostgreSQL ≥ 14 running locally (or use Railway/Neon)
@@ -186,7 +192,7 @@ Fill in `.env.local`:
 NEXT_PUBLIC_TMDB_ACCESS_TOKEN="<your TMDB v4 token>"
 TMDB_TOKEN="<same token — server-only version>"
 NEXT_PUBLIC_BACKEND_URL="http://localhost:4000"
-INTERNAL_BACKEND_URL="http://localhost:4000"   # for the rewrite proxy
+INTERNAL_BACKEND_URL="http://localhost:4000"
 ```
 
 Start the frontend:
@@ -201,27 +207,31 @@ pnpm dev         # http://localhost:3000
 
 ### Backend (Railway)
 
-1. Push to GitHub
-2. Create a new Railway project → Deploy from Repo
-3. Add a Postgres plugin — Railway auto-injects `DATABASE_URL`
-4. Set all `.env` vars in the Railway dashboard (Variables tab)
+1. Push to GitHub.
+2. Create a new Railway project → Deploy from Repo.
+3. Add a Postgres plugin — Railway auto-injects `DATABASE_URL`.
+4. Set all `.env` vars in the Railway dashboard (Variables tab).
 5. Set the callback URL to your **frontend** origin, routed through the proxy:
-   ```
+
+   ```env
    GOOGLE_CALLBACK_URL=https://<your-frontend>.vercel.app/api/backend/auth/google/callback
    ```
 
 ### Frontend (Vercel)
 
-1. Import the repo into Vercel, set the root directory to `frontend/`
+1. Import the repo into Vercel, set the root directory to `frontend/`.
 2. Set env vars:
-   ```
+
+   ```env
    TMDB_TOKEN=...
    NEXT_PUBLIC_TMDB_ACCESS_TOKEN=...
    NEXT_PUBLIC_BACKEND_URL=https://<your-backend>.up.railway.app
    INTERNAL_BACKEND_URL=https://<your-backend>.up.railway.app
    ```
+
 3. Add the redirect URI to Google Cloud Console under your OAuth client's **Authorized redirect URIs**:
-   ```
+
+   ```text
    https://<your-frontend>.vercel.app/api/backend/auth/google/callback
    ```
 
@@ -232,8 +242,9 @@ pnpm dev         # http://localhost:3000
 - **No mocking in dev** — the app runs against a real Postgres and real TMDB from the first `pnpm dev`. Faster to catch integration bugs.
 - **Genre IDs stored on watch** — genres are captured at `mark-as-watched` time from TMDB's response, so stats don't require a separate lookup table or nightly job.
 - **URL-driven pagination** — pagination links are plain `<Link>` tags, not client state. Pages are shareable and browser back/forward works.
-- **Stagger animations in list views** — Framer Motion `staggerChildren` gives lists a subtle cascade on mount without hurting performance (each item is a lightweight `motion.div`).
+- **Stagger animations in list views** — Framer Motion `staggerChildren` gives lists a subtle cascade on mount without hurting performance.
 - **Route segment caching** — Trending is cached 1 hour, top-rated 24 hours, trailers 1 week. TMDB rate limits never hit and the same TMDB call is amortized across all visitors in a cache window.
+- **Email normalization** — emails are lowercased + trimmed before any DB read/write so `Foo@Gmail.com` and `foo@gmail.com` resolve to the same account regardless of auth method.
 
 ---
 

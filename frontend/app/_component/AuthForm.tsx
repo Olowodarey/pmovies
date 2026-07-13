@@ -15,6 +15,12 @@ interface AuthFormProps {
 }
 
 function getErrorMessage(error: unknown, mode: AuthFormProps["mode"]): string {
+  if (error && typeof error === "object" && "data" in error) {
+    // Backend sends a specific message (e.g., "This email is registered with
+    // Google.") — surface it directly so users understand which flow to use.
+    const data = (error as { data?: { message?: string } }).data;
+    if (data?.message) return data.message;
+  }
   if (error && typeof error === "object" && "status" in error) {
     const status = (error as { status: number | string }).status;
     if (status === 409) return "An account with this email already exists.";
