@@ -28,13 +28,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <ReduxProvider>
-        <Theme>
-          <body className={`${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}>
-            {children}
-          </body>
-        </Theme>
-      </ReduxProvider>
+      <body className={`${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}>
+        <ReduxProvider>
+          <Theme>{children}</Theme>
+        </ReduxProvider>
+      </body>
     </html>
   );
 }
