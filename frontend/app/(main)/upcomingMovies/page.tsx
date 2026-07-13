@@ -14,9 +14,10 @@ export default async function UpcomingMoviesPage({ searchParams }: Props) {
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">🗓️</span>
-        <h1 className="font-display text-2xl font-bold text-ink">Upcoming Movies</h1>
+      <div className="flex flex-col items-center text-center gap-1">
+        <span className="text-4xl">🗓️</span>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">Upcoming Movies</h1>
+        <p className="text-sm text-ink-muted">What&apos;s coming to cinemas soon</p>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">

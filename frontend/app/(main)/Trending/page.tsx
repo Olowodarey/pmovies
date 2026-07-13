@@ -19,8 +19,10 @@ export default async function TrendingPage({ searchParams }: Props) {
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="font-display text-2xl font-bold text-ink">Trending Movies</h1>
+      <div className="flex flex-col items-center text-center gap-3">
+        <span className="text-4xl">🔥</span>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">Trending Movies</h1>
+        <p className="text-sm text-ink-muted">What everyone&apos;s watching right now</p>
 
         {/* URL-driven toggle — pure Links, zero JS */}
         <div className="flex border border-edge rounded-full w-fit">

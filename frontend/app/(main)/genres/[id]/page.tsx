@@ -34,11 +34,11 @@ export default async function GenreMoviesPage({ params, searchParams }: Props) {
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="font-display text-2xl font-bold text-ink">{name} Movies</h1>
+      <div className="flex flex-col items-center text-center gap-3">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">{name} Movies</h1>
 
         {/* Decade filter — pure Links */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {DECADES.map((d) => (
             <Link
               key={d.label}

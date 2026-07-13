@@ -14,13 +14,11 @@ export default async function TopRatedPage({ searchParams }: Props) {
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">⭐</span>
-        <h1 className="font-display text-2xl font-bold text-ink">Top Rated Movies</h1>
+      <div className="flex flex-col items-center text-center gap-1">
+        <span className="text-4xl">⭐</span>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">Top Rated Movies</h1>
+        <p className="text-sm text-ink-muted">The highest-rated movies of all time, as voted by millions</p>
       </div>
-      <p className="mt-1 text-sm text-ink-muted">
-        The highest-rated movies of all time, as voted by millions
-      </p>
 
       <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 lg:gap-x-2">
         {data.results.map((movie) => (

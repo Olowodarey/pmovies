@@ -31,12 +31,12 @@ export default function PeoplePage() {
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <h1 className="font-display text-2xl font-bold text-ink">Search by Actor / Director</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Find all movies featuring a specific person
-      </p>
+      <div className="text-center">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">Search by Actor / Director</h1>
+        <p className="mt-1 text-sm text-ink-muted">Find all movies featuring a specific person</p>
+      </div>
 
-      <div className="mt-5 flex gap-2 max-w-md">
+      <div className="mt-5 flex gap-2 max-w-md mx-auto">
         <input
           type="text"
           value={query}

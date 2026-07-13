@@ -24,8 +24,10 @@ const GENRES = [
 export default function GenresPage() {
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
-      <h1 className="font-display text-2xl font-bold text-ink">Browse by Genre</h1>
-      <p className="mt-1 text-sm text-ink-muted">Pick a genre to discover movies</p>
+      <div className="text-center">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink">Browse by Genre</h1>
+        <p className="mt-1 text-sm text-ink-muted">Pick a genre to discover movies</p>
+      </div>
 
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {GENRES.map((genre) => (
