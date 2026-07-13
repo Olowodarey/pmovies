@@ -33,10 +33,10 @@ const Header = () => {
       <div className="lg:pl-80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="flex justify-between items-center lg:grid lg:grid-cols-[auto_1fr_auto] lg:gap-4">
-            <div className="flex space-x-2 items-center">
+            <Link href="/" className="flex space-x-2 items-center hover:opacity-80 transition-opacity">
               <Image src={logo} alt="logo" />
               <span className="font-bold tracking-wide text-brand">Movies</span>
-            </div>
+            </Link>
 
             <div className="hidden lg:flex lg:justify-center">
               <Search />
