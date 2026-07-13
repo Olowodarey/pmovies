@@ -10,6 +10,7 @@ export interface Movie {
   poster_path: string | null;
   release_date: string;
   vote_average: number;
+  genre_ids?: number[];
 }
 
 export interface MovieDetails extends Movie {
@@ -42,4 +43,12 @@ export interface PaginatedResponse<T> {
   results: T[];
   total_pages: number;
   total_results: number;
+}
+
+export interface Person {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  known_for_department: string;
+  known_for: Movie[];
 }

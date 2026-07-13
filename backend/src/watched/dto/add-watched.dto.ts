@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { MediaType } from '../../../generated/prisma/enums';
 
 export class AddWatchedDto {
@@ -14,6 +14,11 @@ export class AddWatchedDto {
   @IsOptional()
   @IsString()
   posterPath?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsInt({ each: true })
+  genreIds?: number[];
 
   @IsOptional()
   @IsInt()

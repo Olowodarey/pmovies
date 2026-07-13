@@ -10,6 +10,10 @@ import {
   FireIcon,
   ForwardIcon,
   HomeIcon,
+  StarIcon,
+  TagIcon,
+  UserGroupIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 
 interface NavigationItem {
@@ -20,10 +24,14 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
-  { name: "Trending movies", href: "/Trending", icon: FireIcon },
-  { name: "Upcoming movies", href: "/upcomingMovies", icon: EyeIcon },
-  { name: "Animatied movies", href: "/animatiedmovies", icon: FaceSmileIcon },
+  { name: "Trending", href: "/Trending", icon: FireIcon },
+  { name: "Upcoming", href: "/upcomingMovies", icon: EyeIcon },
+  { name: "Top Rated", href: "/top-rated", icon: StarIcon },
+  { name: "Animated", href: "/animatiedmovies", icon: FaceSmileIcon },
   { name: "Series", href: "/series", icon: ForwardIcon },
+  { name: "Genres", href: "/genres", icon: TagIcon },
+  { name: "People", href: "/people", icon: UserGroupIcon },
+  { name: "About", href: "/about", icon: InformationCircleIcon },
 ];
 
 function classNames(...classes: (string | boolean | undefined)[]) {
@@ -34,53 +42,46 @@ export default function MobileNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  const toggleMobile = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileOpen(false);
-  };
-
   return (
     <div>
       <div className="lg:hidden flex justify-end">
-        <button onClick={toggleMobile} className="text-ink-muted">
-          {mobileOpen ? <ImCancelCircle className="hidden" /> : <IoIosMenu size={35} />}
+        <button onClick={() => setMobileOpen(true)} className="text-ink-muted">
+          <IoIosMenu size={35} />
         </button>
       </div>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="fixed inset-0 bg-black/60" onClick={toggleMobile}></div>
-          <div className="relative flex-1 flex flex-col max-w-[220px] w-full bg-surface border-r border-edge">
+          <div className="fixed inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
+          <div className="relative flex-1 flex flex-col max-w-[240px] w-full bg-surface border-r border-edge overflow-y-auto">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
               <button
                 className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand"
-                onClick={toggleMobile}
+                onClick={() => setMobileOpen(false)}
               >
                 <ImCancelCircle className="h-6 w-6 text-ink" />
               </button>
             </div>
-            <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-              <nav className="flex-1 mt-[10px]">
-                <ul role="list" className="space-y-1">
-                  {navigation.map((item) => (
+            <nav className="flex-1 pt-6 pb-4 px-3">
+              <ul role="list" className="space-y-1">
+                {navigation.map((item) => {
+                  const isActive =
+                    item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+                  return (
                     <li key={item.name}>
-                      <Link href={item.href}>
+                      <Link href={item.href} onClick={() => setMobileOpen(false)}>
                         <div
-                          onClick={closeMobileMenu}
                           className={classNames(
-                            pathname === item.href
+                            isActive
                               ? "bg-brand text-brand-contrast"
                               : "text-ink-muted hover:bg-surface-hover hover:text-ink",
-                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors"
+                            "group flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors"
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              pathname === item.href ? "text-brand-contrast" : "text-ink-muted",
-                              "mr-3 h-6 w-6"
+                              isActive ? "text-brand-contrast" : "text-ink-muted",
+                              "mr-3 h-5 w-5"
                             )}
                             aria-hidden="true"
                           />
@@ -88,10 +89,10 @@ export default function MobileNavbar() {
                         </div>
                       </Link>
                     </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
+                  );
+                })}
+              </ul>
+            </nav>
           </div>
         </div>
       )}

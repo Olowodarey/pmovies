@@ -8,6 +8,10 @@ import {
   FireIcon,
   ForwardIcon,
   HomeIcon,
+  StarIcon,
+  TagIcon,
+  UserGroupIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 
 interface NavigationItem {
@@ -18,10 +22,14 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
-  { name: "Trending movies", href: "/Trending", icon: FireIcon },
-  { name: "Upcoming movies", href: "/upcomingMovies", icon: EyeIcon },
-  { name: "Animated movies", href: "/animatiedmovies", icon: FaceSmileIcon },
+  { name: "Trending", href: "/Trending", icon: FireIcon },
+  { name: "Upcoming", href: "/upcomingMovies", icon: EyeIcon },
+  { name: "Top Rated", href: "/top-rated", icon: StarIcon },
+  { name: "Animated", href: "/animatiedmovies", icon: FaceSmileIcon },
   { name: "Series", href: "/series", icon: ForwardIcon },
+  { name: "Genres", href: "/genres", icon: TagIcon },
+  { name: "People", href: "/people", icon: UserGroupIcon },
+  { name: "About", href: "/about", icon: InformationCircleIcon },
 ];
 
 function classNames(...classes: (string | boolean | undefined)[]) {
@@ -33,9 +41,8 @@ export default function Navbar() {
 
   return (
     <div>
-      {/* Sidebar for desktop */}
       <div className="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 lg:overflow-y-auto lg:px-4">
-        <nav className="flex-1 mt-[300px]">
+        <nav className="flex-1 mt-[200px]">
           <div className="bg-surface border border-edge rounded-2xl shadow-lg p-5">
             <div className="flex items-center gap-2 px-2 mb-6">
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
@@ -43,9 +50,12 @@ export default function Navbar() {
                 Browse
               </p>
             </div>
-            <ul role="list" className="space-y-3">
+            <ul role="list" className="space-y-2">
               {navigation.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(item.href);
                 return (
                   <li key={item.name}>
                     <Link href={item.href}>
@@ -54,7 +64,7 @@ export default function Navbar() {
                           isActive
                             ? "bg-brand text-brand-contrast shadow-md"
                             : "text-ink-muted hover:bg-surface-hover hover:text-ink",
-                          "group flex items-center gap-3.5 px-3.5 py-3 text-sm font-medium rounded-xl transition-all duration-200"
+                          "group flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200"
                         )}
                       >
                         <span
@@ -62,7 +72,7 @@ export default function Navbar() {
                             isActive
                               ? "bg-white/15 text-brand-contrast"
                               : "bg-surface-alt text-ink-muted group-hover:bg-brand group-hover:text-white group-hover:scale-110",
-                            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all duration-200"
+                            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-all duration-200"
                           )}
                         >
                           <item.icon className="h-5 w-5" aria-hidden="true" />

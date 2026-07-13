@@ -1,23 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { useFetchUpComingQuery } from "@/app/_services/fetchquerry";
+import { useFetchTopRatedMoviesQuery } from "@/app/_services/fetchquerry";
 import MovieCard from "@/app/_component/movieCard";
 import Loading from "@/app/Loading";
 
-export default function UpcomingMoviesPage() {
+export default function TopRatedPage() {
   const [page, setPage] = useState(1);
-  const { data, error, isLoading } = useFetchUpComingQuery(page);
+  const { data, isLoading, error } = useFetchTopRatedMoviesQuery(page);
 
   return (
     <div className="px-5 lg:px-7 mt-7 pb-16">
       <div className="flex items-center gap-3">
-        <span className="text-2xl">🗓️</span>
-        <h1 className="font-display text-2xl font-bold text-ink">Upcoming Movies</h1>
+        <span className="text-2xl">⭐</span>
+        <h1 className="font-display text-2xl font-bold text-ink">Top Rated Movies</h1>
       </div>
+      <p className="mt-1 text-sm text-ink-muted">
+        The highest-rated movies of all time, as voted by millions
+      </p>
 
-      {isLoading && <div className="flex justify-center mt-20"><Loading /></div>}
-      {error && <p className="mt-10 text-center text-danger">Error loading upcoming movies.</p>}
+      {isLoading && (
+        <div className="flex justify-center mt-20"><Loading /></div>
+      )}
+      {error && (
+        <p className="mt-10 text-center text-danger">Failed to load movies.</p>
+      )}
 
       {data && (
         <>
@@ -26,16 +33,19 @@ export default function UpcomingMoviesPage() {
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
+
           <div className="flex items-center justify-center gap-3 mt-10">
             <button
               type="button"
               disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
               className="px-4 py-1.5 rounded-full border border-edge text-sm text-ink-muted hover:text-ink disabled:opacity-40 transition-colors"
             >
               ← Prev
             </button>
-            <span className="text-sm text-ink-muted">Page {page} of {data.total_pages}</span>
+            <span className="text-sm text-ink-muted">
+              Page {page} of {data.total_pages}
+            </span>
             <button
               type="button"
               disabled={page >= data.total_pages}

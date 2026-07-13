@@ -8,17 +8,45 @@ import {
   useGetMeQuery,
   useGetWatchlistQuery,
   useGetWatchedQuery,
+  useGetUserStatsQuery,
   useLogoutMutation,
   useRemoveFromWatchlistMutation,
   useMarkAsWatchedMutation,
   useRemoveWatchedMutation,
   useUpdateWatchedRatingMutation,
 } from "@/app/_services/backendApi";
-import StatTile from "@/app/_component/StatTile";
 import TrackedMovieCard from "@/app/_component/TrackedMovieCard";
 import Loading from "@/app/Loading";
+import {
+  FilmIcon,
+  TvIcon,
+  EyeIcon,
+  CalendarDaysIcon,
+  ClockIcon,
+  StarIcon,
+  BookmarkIcon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
 
 type Tab = "watchlist" | "watched";
+
+const StatCard = ({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  label: string;
+  value: string | number;
+}) => (
+  <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-edge bg-surface p-4 shadow-sm text-center">
+    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/10">
+      <Icon className="h-5 w-5 text-brand" strokeWidth={1.8} />
+    </span>
+    <p className="text-xl font-bold text-ink">{value}</p>
+    <p className="text-xs text-ink-muted">{label}</p>
+  </div>
+);
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -32,6 +60,7 @@ const ProfilePage = () => {
   } = useGetMeQuery();
   const { data: watchlist = [] } = useGetWatchlistQuery(undefined, { skip: !user });
   const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
+  const { data: stats } = useGetUserStatsQuery(undefined, { skip: !user });
 
   const [logout] = useLogoutMutation();
   const [removeFromWatchlist] = useRemoveFromWatchlistMutation();
@@ -40,9 +69,6 @@ const ProfilePage = () => {
   const [updateRating] = useUpdateWatchedRatingMutation();
 
   useEffect(() => {
-    // Only redirect once the query has actually settled: not on stale errors
-    // from a previous unauthenticated fetch that RTK Query is currently
-    // refetching after a login-triggered `invalidatesTags: ["Me"]`.
     if (!meLoading && !meFetching && meError && !user) {
       router.replace("/login");
     }
@@ -56,12 +82,6 @@ const ProfilePage = () => {
     );
   }
 
-  const now = new Date();
-  const thisMonthCount = watched.filter((w) => {
-    const d = new Date(w.watchedAt);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).length;
-
   const initials = (user.name || user.email).slice(0, 2).toUpperCase();
   const joinDate = new Date(user.createdAt).toLocaleDateString(undefined, {
     month: "long",
@@ -71,9 +91,9 @@ const ProfilePage = () => {
   const items = tab === "watchlist" ? watchlist : watched;
 
   return (
-    <div className="px-5 lg:px-7 mt-7">
+    <div className="px-5 lg:px-7 mt-7 pb-16">
       {/* Profile header */}
-      <div className="flex items-center gap-4 bg-surface border border-edge rounded-lg shadow-sm p-4">
+      <div className="flex items-center gap-4 bg-surface border border-edge rounded-2xl shadow-sm p-5">
         {user.avatarUrl ? (
           <Image
             src={user.avatarUrl}
@@ -100,12 +120,47 @@ const ProfilePage = () => {
         </button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
-        <StatTile label="Watched" value={watched.length} />
-        <StatTile label="Watchlist" value={watchlist.length} />
-        <StatTile label="This Month" value={thisMonthCount} />
-      </div>
+      {/* Stats grid */}
+      {stats && (
+        <div className="mt-6">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-ink-muted mb-3">
+            Your Activity
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <StatCard icon={EyeIcon} label="Total Watched" value={stats.totalWatched} />
+            <StatCard icon={BookmarkIcon} label="Watchlist" value={stats.totalWatchlist} />
+            <StatCard icon={CalendarDaysIcon} label="This Month" value={stats.thisMonth} />
+            <StatCard icon={ClockIcon} label="This Year" value={stats.thisYear} />
+            <StatCard icon={FilmIcon} label="Movies" value={stats.moviesCount} />
+            <StatCard icon={TvIcon} label="TV Shows" value={stats.tvCount} />
+            <StatCard
+              icon={StarIcon}
+              label="Avg Rating"
+              value={stats.avgRating !== null ? `${stats.avgRating} / 5` : "—"}
+            />
+            <div className="col-span-1 flex flex-col items-center justify-center gap-2 rounded-2xl border border-edge bg-surface p-4 shadow-sm text-center">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/10">
+                <TagIcon className="h-5 w-5 text-brand" strokeWidth={1.8} />
+              </span>
+              {stats.topGenres.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-1 mt-0.5">
+                  {stats.topGenres.slice(0, 3).map((g) => (
+                    <span
+                      key={g.id}
+                      className="rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand"
+                    >
+                      {g.name}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xl font-bold text-ink">—</p>
+              )}
+              <p className="text-xs text-ink-muted">Top Genres</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex border border-edge rounded-full mt-8 w-fit">

@@ -57,6 +57,7 @@ const Moviedetails = ({ movie, trailer }: MoviedetailsProps) => {
     mediaType: "MOVIE" as const,
     title,
     posterPath: poster_path,
+    genreIds: genres.map((g) => g.id),
   };
 
   return (

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type {
   AuthUser,
   TrackableMovie,
+  UserStats,
   WatchedItem,
   WatchlistItem,
 } from "@/app/_types/backend";
@@ -29,7 +30,7 @@ export const backendApi = createApi({
     baseUrl: BASE_URL,
     credentials: "include",
   }),
-  tagTypes: ["Me", "Watchlist", "Watched"],
+  tagTypes: ["Me", "Watchlist", "Watched", "Stats"],
   endpoints: (builder) => ({
     signup: builder.mutation<AuthUser, SignupBody>({
       query: (body) => ({ url: "auth/signup", method: "POST", body }),
@@ -41,7 +42,7 @@ export const backendApi = createApi({
     }),
     logout: builder.mutation<{ success: boolean }, void>({
       query: () => ({ url: "auth/logout", method: "POST" }),
-      invalidatesTags: ["Me", "Watchlist", "Watched"],
+      invalidatesTags: ["Me", "Watchlist", "Watched", "Stats"],
     }),
     getMe: builder.query<AuthUser, void>({
       query: () => "auth/me",
@@ -71,7 +72,7 @@ export const backendApi = createApi({
     }),
     markAsWatched: builder.mutation<WatchedItem, MarkWatchedBody>({
       query: (body) => ({ url: "watched", method: "POST", body }),
-      invalidatesTags: ["Watched", "Watchlist"],
+      invalidatesTags: ["Watched", "Watchlist", "Stats"],
     }),
     updateWatchedRating: builder.mutation<
       WatchedItem,
@@ -82,11 +83,15 @@ export const backendApi = createApi({
         method: "PATCH",
         body: { rating },
       }),
-      invalidatesTags: ["Watched"],
+      invalidatesTags: ["Watched", "Stats"],
     }),
     removeWatched: builder.mutation<{ success: boolean }, string>({
       query: (id) => ({ url: `watched/${id}`, method: "DELETE" }),
-      invalidatesTags: ["Watched"],
+      invalidatesTags: ["Watched", "Stats"],
+    }),
+    getUserStats: builder.query<UserStats, void>({
+      query: () => "watched/stats",
+      providesTags: ["Stats"],
     }),
   }),
 });
@@ -103,4 +108,5 @@ export const {
   useMarkAsWatchedMutation,
   useUpdateWatchedRatingMutation,
   useRemoveWatchedMutation,
+  useGetUserStatsQuery,
 } = backendApi;

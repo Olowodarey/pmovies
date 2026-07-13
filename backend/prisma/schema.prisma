@@ -51,6 +51,7 @@ model WatchedEntry {
   mediaType  MediaType @default(MOVIE)
   title      String
   posterPath String?
+  genreIds   Int[]     @default([])
   rating     Int?
   watchedAt  DateTime  @default(now())
 

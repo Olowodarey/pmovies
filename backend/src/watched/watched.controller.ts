@@ -19,6 +19,11 @@ import { UpdateWatchedDto } from './dto/update-watched.dto';
 export class WatchedController {
   constructor(private readonly watchedService: WatchedService) {}
 
+  @Get('stats')
+  getStats(@CurrentUser() user: AuthenticatedUser) {
+    return this.watchedService.getStats(user.userId);
+  }
+
   @Get()
   findAll(@CurrentUser() user: AuthenticatedUser) {
     return this.watchedService.findAll(user.userId);

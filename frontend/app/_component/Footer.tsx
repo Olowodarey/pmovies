@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { SVGProps } from "react";
 
 interface NavigationItem {
@@ -86,7 +87,18 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        <p className="mt-8 text-center text-sm/6 text-ink-muted md:order-1 md:mt-0">
+        <div className="mt-8 flex justify-center gap-6 md:order-1 md:mt-0">
+          <Link href="/about" className="text-sm text-ink-muted hover:text-brand transition-colors">
+            About
+          </Link>
+          <Link href="/genres" className="text-sm text-ink-muted hover:text-brand transition-colors">
+            Genres
+          </Link>
+          <Link href="/top-rated" className="text-sm text-ink-muted hover:text-brand transition-colors">
+            Top Rated
+          </Link>
+        </div>
+        <p className="mt-4 text-center text-sm/6 text-ink-muted md:order-1 md:mt-0">
           &copy; 2024 Darey. All rights reserved.
         </p>
       </div>
