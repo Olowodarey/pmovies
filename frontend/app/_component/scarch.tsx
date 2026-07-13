@@ -25,19 +25,19 @@ const Search = () => {
   };
 
   return (
-    <div className="">
+    <div className="flex gap-2 w-full max-w-md">
       <input
         type="text"
         value={query}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Search for movies..."
-        className="p-1 border border-edge rounded-md text-xs lg:text-base bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
+        className="flex-1 min-w-0 p-1 border border-edge rounded-md text-xs lg:text-base bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
       />
 
       <button
         onClick={handleSearch}
-        className="p-1 ml-2 text-xs lg:text-base bg-brand text-brand-contrast rounded-md font-medium hover:bg-brand-hover transition-colors"
+        className="shrink-0 p-1 text-xs lg:text-base bg-brand text-brand-contrast rounded-md font-medium hover:bg-brand-hover transition-colors"
       >
         Search
       </button>

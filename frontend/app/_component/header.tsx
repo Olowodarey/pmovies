@@ -27,7 +27,7 @@ const Header = () => {
   };
 
   return (
-    <div className="py-3 bg-surface border-b border-edge">
+    <div className="py-3 bg-surface border-b border-edge overflow-x-hidden">
       {/* Matches main's lg:pl-80 (sidebar offset) + max-w-7xl mx-auto so header
           content centers within the same column as page content. */}
       <div className="lg:pl-80">

@@ -32,9 +32,14 @@
   --danger-hover: #f47a7e;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   color: var(--text);
   background: var(--bg);
+  overflow-x: hidden;
 }
 
 .line {
