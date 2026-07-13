@@ -1,24 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useLoginMutation, useSignupMutation } from "@/app/_services/backendApi";
 
-// Google OAuth is routed through /api/backend so the auth cookie set by the
-// callback is first-party on the frontend origin (not third-party from Railway).
 const GOOGLE_AUTH_URL = "/api/backend/auth/google";
 
 interface AuthFormProps {
   mode: "login" | "signup";
 }
 
+// Password rules — kept in one place so frontend and backend stay in sync.
+const RULES = [
+  { label: "At least 6 characters", test: (p: string) => p.length >= 6 },
+  { label: "One uppercase letter (A–Z)", test: (p: string) => /[A-Z]/.test(p) },
+  { label: "One lowercase letter (a–z)", test: (p: string) => /[a-z]/.test(p) },
+  { label: "One number or special character", test: (p: string) => /[\d\W]/.test(p) },
+];
+
+function passwordStrength(password: string): 0 | 1 | 2 | 3 {
+  const passed = RULES.filter((r) => r.test(password)).length;
+  if (passed <= 1) return 0;
+  if (passed === 2) return 1;
+  if (passed === 3) return 2;
+  return 3;
+}
+
+const strengthLabel = ["Weak", "Fair", "Good", "Strong"] as const;
+const strengthColor = [
+  "bg-red-500",
+  "bg-orange-400",
+  "bg-yellow-400",
+  "bg-green-500",
+] as const;
+
 function getErrorMessage(error: unknown, mode: AuthFormProps["mode"]): string {
   if (error && typeof error === "object" && "data" in error) {
-    // Backend sends a specific message (e.g., "This email is registered with
-    // Google.") — surface it directly so users understand which flow to use.
-    const data = (error as { data?: { message?: string } }).data;
+    const data = (error as { data?: { message?: string | string[] } }).data;
+    if (Array.isArray(data?.message)) return data.message[0];
     if (data?.message) return data.message;
   }
   if (error && typeof error === "object" && "status" in error) {
@@ -37,12 +58,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const [login, loginState] = useLoginMutation();
   const [signup, signupState] = useSignupMutation();
 
   const isLogin = mode === "login";
   const { isLoading, error } = isLogin ? loginState : signupState;
+
+  const strength = useMemo(() => passwordStrength(password), [password]);
+  const allRulesPassed = RULES.every((r) => r.test(password));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +79,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       }
       router.push("/profile");
     } catch {
-      // error state is already surfaced via loginState/signupState.error
+      // error is surfaced via loginState/signupState.error
     }
   };
 
@@ -75,6 +100,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
               className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
             />
           )}
+
           <input
             type="email"
             required
@@ -83,15 +109,62 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             placeholder="Email"
             className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
           />
-          <input
-            type="password"
-            required
-            minLength={8}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
-          />
+
+          <div className="space-y-2">
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setPasswordTouched(true)}
+              placeholder="Password"
+              className="w-full p-2 border border-edge rounded-md text-sm bg-surface text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-brand"
+            />
+
+            {/* Strength bar + checklist — only visible on signup after typing */}
+            {!isLogin && password.length > 0 && (
+              <div className="space-y-2">
+                {/* Segmented strength bar */}
+                <div className="flex gap-1 h-1.5">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className={`flex-1 rounded-full transition-colors duration-300 ${
+                        i <= strength ? strengthColor[strength] : "bg-edge"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className={`text-xs font-medium ${
+                  strength === 3 ? "text-green-600 dark:text-green-400" :
+                  strength === 2 ? "text-yellow-600 dark:text-yellow-400" :
+                  strength === 1 ? "text-orange-500" : "text-red-500"
+                }`}>
+                  {strengthLabel[strength]}
+                </p>
+
+                {/* Rule checklist — shown when touched or any rule fails */}
+                {(passwordTouched || !allRulesPassed) && (
+                  <ul className="space-y-1">
+                    {RULES.map((rule) => {
+                      const ok = rule.test(password);
+                      return (
+                        <li key={rule.label} className="flex items-center gap-1.5 text-xs">
+                          <span className={ok ? "text-green-500" : "text-ink-muted"}>
+                            {ok ? "✓" : "○"}
+                          </span>
+                          <span className={ok ? "text-ink line-through decoration-green-500/50" : "text-ink-muted"}>
+                            {rule.label}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
 
           {error !== undefined && (
             <p className="text-sm text-danger">{getErrorMessage(error, mode)}</p>
@@ -99,10 +172,10 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full bg-brand text-brand-contrast rounded-md py-2 font-medium hover:bg-brand-hover transition-colors disabled:opacity-60"
+            disabled={isLoading || (!isLogin && !allRulesPassed)}
+            className="w-full bg-brand text-brand-contrast rounded-md py-2 font-medium hover:bg-brand-hover transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Please wait..." : isLogin ? "Log in" : "Sign up"}
+            {isLoading ? "Please wait…" : isLogin ? "Log in" : "Sign up"}
           </button>
         </form>
 
