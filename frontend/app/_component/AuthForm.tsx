@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useLoginMutation, useSignupMutation } from "@/app/_services/backendApi";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000";
+// Google OAuth is routed through /api/backend so the auth cookie set by the
+// callback is first-party on the frontend origin (not third-party from Railway).
+const GOOGLE_AUTH_URL = "/api/backend/auth/google";
 
 interface AuthFormProps {
   mode: "login" | "signup";
@@ -105,7 +107,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
         </div>
 
         <a
-          href={`${BACKEND_URL}/auth/google`}
+          href={GOOGLE_AUTH_URL}
           className="mt-5 w-full flex items-center justify-center gap-2 border border-edge rounded-md py-2 text-sm font-medium text-ink hover:bg-surface-hover transition-colors"
         >
           <FcGoogle className="h-5 w-5" />
