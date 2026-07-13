@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import {
+  backendApi,
   useGetMeQuery,
   useGetWatchlistQuery,
   useGetWatchedQuery,
@@ -51,6 +53,7 @@ const StatCard = ({
 
 const ProfilePage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [tab, setTab] = useState<Tab>("watchlist");
 
   // Force a fresh fetch every mount — never trust a cached error from a prior
@@ -71,7 +74,20 @@ const ProfilePage = () => {
   const { data: watched = [] } = useGetWatchedQuery(undefined, { skip: !user });
   const { data: stats } = useGetUserStatsQuery(undefined, { skip: !user });
 
-  const [logout] = useLogoutMutation();
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch {
+      // Even if the request fails, still purge local state and redirect —
+      // the cookie may already be gone or the network may be flaky.
+    }
+    // Wipe every cached user/query so the Header (which also uses useGetMeQuery)
+    // and any other component immediately reflect a signed-out state.
+    dispatch(backendApi.util.resetApiState());
+    router.replace("/login");
+  };
   const [removeFromWatchlist] = useRemoveFromWatchlistMutation();
   const [markAsWatched] = useMarkAsWatchedMutation();
   const [removeWatched] = useRemoveWatchedMutation();
@@ -127,10 +143,11 @@ const ProfilePage = () => {
         </div>
         <button
           type="button"
-          onClick={() => logout()}
-          className="ml-auto text-sm text-danger hover:text-danger-hover transition-colors"
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          className="ml-auto text-sm text-danger hover:text-danger-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Log out
+          {isLoggingOut ? "Logging out…" : "Log out"}
         </button>
       </div>
 
